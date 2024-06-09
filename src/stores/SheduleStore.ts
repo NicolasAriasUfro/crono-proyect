@@ -39,14 +39,14 @@ export const useScheduleStore = defineStore("schedule", {
     paused: true,
   }),
   getters: {
-    lengthSchedules(): number{
-      return this.schedules.length;
+    quantity(state): number{
+      return state.schedules.length;
     },
-    getSelectedTimer() :Timer{
-      return this.schedules[this.selectedSchedule].timers[this.selectedTimer];
+    getSelectedTimer(state) :Timer{
+      return state.schedules[state.selectedSchedule].timers[state.selectedTimer];
     },
-    timeOfSelectedTimer() :number{
-      return this.schedules[this.selectedSchedule].timers[this.selectedTimer]
+    timeOfSelectedTimer(state) :number{
+      return state.schedules[state.selectedSchedule].timers[state.selectedTimer]
         .actualSeconds;
     },
   },
