@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { useSessionStore } from "../stores/SessionStore";
-import { useAudioStore } from "../stores/AudioStore";
+import {useSessionStore} from "../stores/SessionStore";
+import {useAudioStore} from "../stores/AudioStore";
 import router from "../router";
 import ThemesSelector from "../components/ThemesSelector.vue";
 

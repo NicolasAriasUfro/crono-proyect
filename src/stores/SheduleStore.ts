@@ -1,8 +1,28 @@
-import { useSerialPortStore } from "@/stores/SerialPortStore";
-import { defineStore } from "pinia";
-import { ref } from 'vue';
+import {useSerialPortStore} from "./SerialPortStore.ts";
+import {defineStore} from "pinia";
+
+interface Timer {
+    id: number;
+    name: string;
+    initialSeconds: number;
+    actualSeconds: number;
+}
+interface Schedule {
+    id: number;
+    name: string;
+    lastTimerId: number;
+    timers: Timer[];
+
+}
+interface ScheduleStore {
+    selectedSchedule: number;
+    selectedTimer: number;
+    lastScheduleId: number;
+    schedules: Schedule[];
+    paused: boolean;
+}
 export const useScheduleStore = defineStore("schedule", {
-  state: () => ({
+  state: (): ScheduleStore=> ({
     /**@Type int*/
     selectedSchedule: 0,
     /**@Type int */
@@ -36,13 +56,13 @@ export const useScheduleStore = defineStore("schedule", {
      */
   }),
   getters: {
-    lengthSchedules() {
+    lengthSchedules(): number{
       return this.schedules.length;
     },
-    getSelectedTimer() {
+    getSelectedTimer() :Timer{
       return this.schedules[this.selectedSchedule].timers[this.selectedTimer];
     },
-    timeOfSelectedTimer() {
+    timeOfSelectedTimer() :number{
       return this.schedules[this.selectedSchedule].timers[this.selectedTimer]
         .actualSeconds;
     },
@@ -81,7 +101,7 @@ export const useScheduleStore = defineStore("schedule", {
         this.selectedTimer++;
       }
     },
-    addSchedule(name) {
+    addSchedule(name:string) {
       this.lastScheduleId++;
       const newSchedule = {
         id: this.lastScheduleId,
@@ -93,7 +113,7 @@ export const useScheduleStore = defineStore("schedule", {
       this.saveToLocalStorage();
       return newSchedule;
     },
-    removeSchedule(idSchedule) {
+    removeSchedule(idSchedule:number){
       const index = this.schedules.findIndex(
         (schedule) => schedule.id === idSchedule
       );
@@ -101,7 +121,7 @@ export const useScheduleStore = defineStore("schedule", {
         this.schedules.splice(index, 1);
       }
     },
-    addTimer(nameTimer, initialSeconds) {
+    addTimer(nameTimer:string, initialSeconds:number) {
       this.schedules[this.selectedSchedule].lastTimerId++;
       //create the timer
       const newTimer = {
@@ -115,7 +135,7 @@ export const useScheduleStore = defineStore("schedule", {
       this.saveToLocalStorage();
       return newTimer;
     },
-    removeTimer(idSchedule, idTimer) {
+    removeTimer(idSchedule: number, idTimer: number) {
       const schedule = this.schedules.find((s) => s.id === idSchedule);
       if (schedule) {
         const index = schedule.timers.findIndex(
@@ -126,7 +146,7 @@ export const useScheduleStore = defineStore("schedule", {
         }
       }
     },
-    removeTimerFromActiveSchedule(idTimer) {
+    removeTimerFromActiveSchedule(idTimer: number) {
       // Remove the timer from the default schedule
       console.log(idTimer);
       const schedule = this.schedules[this.selectedSchedule];
@@ -136,7 +156,7 @@ export const useScheduleStore = defineStore("schedule", {
       }
       this.saveToLocalStorage();
     },
-    decreaseTimer(idTimer, seconds) {
+    decreaseTimer(idTimer:number, seconds:number) {
       const selectedSchedule =
         useScheduleStore().schedules[this.selectedSchedule];
       const timerIndex = selectedSchedule.timers.findIndex(
@@ -153,7 +173,7 @@ export const useScheduleStore = defineStore("schedule", {
 
       this.resetAllTimers();
     },
-    resetTimer(idTimer) {
+    resetTimer(idTimer:number) {
       const selectedSchedule = this.schedules[this.selectedSchedule];
       const timerIndex = selectedSchedule.timers.findIndex(
         (t) => t.id === idTimer
@@ -173,7 +193,7 @@ export const useScheduleStore = defineStore("schedule", {
 
       this.saveToLocalStorage();
     },
-    changeTimerName(idTimer, newName) {
+    changeTimerName(idTimer: number, newName: string) {
       const selectedSchedule = this.schedules[this.selectedSchedule];
       const timerIndex = selectedSchedule.timers.findIndex(
         (t) => t.id === idTimer
@@ -208,10 +228,10 @@ export const useScheduleStore = defineStore("schedule", {
     },
     saveToLocalStorage() {
       localStorage.setItem("schedules", JSON.stringify(this.schedules));
-      localStorage.setItem("selectedSchedule", this.selectedSchedule);
-      localStorage.setItem("selectedTimer", this.selectedTimer);
-      localStorage.setItem("paused", this.paused);
-      localStorage.setItem("lastScheduleId", this.lastScheduleId);
+      localStorage.setItem("selectedSchedule", String(this.selectedSchedule));
+      localStorage.setItem("selectedTimer", String(this.selectedTimer));
+      localStorage.setItem("paused", String(this.paused));
+      localStorage.setItem("lastScheduleId", String(this.lastScheduleId));
     },
   },
 });

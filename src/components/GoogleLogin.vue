@@ -1,8 +1,9 @@
 <script lang=ts>
-    import { GoogleAuthProvider, signInWithPopup, getAuth } from 'firebase/auth'
-    import { useSessionStore } from '@/stores/SessionStore';
-    import router from '@/router';
-    export default {
+import {getAuth, GoogleAuthProvider, signInWithPopup} from 'firebase/auth'
+import {useSessionStore} from '@/stores/SessionStore';
+import router from '@/router';
+
+export default {
         data: () => ({
             store: useSessionStore(),
             googleProvider: new GoogleAuthProvider(),

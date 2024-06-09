@@ -1,5 +1,6 @@
 <script lang="ts">
-import { useSerialPortStore } from "@/stores/SerialPortStore";
+import {useSerialPortStore} from "@/stores/SerialPortStore";
+
 export default {
   name: "ConfigView",
   methods: {

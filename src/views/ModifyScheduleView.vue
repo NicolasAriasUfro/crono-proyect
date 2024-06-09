@@ -1,5 +1,5 @@
 <script lang=ts>
-import { useScheduleStore } from "@/stores/SheduleStore";
+import {useScheduleStore} from "@/stores/SheduleStore";
 
 export default {
   name: "ModifyScheduleView",

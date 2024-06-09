@@ -13,14 +13,13 @@ html, body, #app {
   margin: 0;
 }
 </style>
-<script setup>
-import { useIntervalStore } from "@/stores/IntervalStore";
-import { useScheduleStore } from "@/stores/SheduleStore";
-import { useSessionStore } from "./stores/SessionStore";
-import { onMounted, onUnmounted } from "vue";
-import { useTheme } from "vuetify/lib/framework.mjs";
-import { useGroupStore } from "./stores/GroupStore";
-import { intervalService } from "./services/IntervalService";
+<script setup lang="ts">
+import {useIntervalStore} from "@/stores/IntervalStore";
+import {useScheduleStore} from "@/stores/SheduleStore";
+import {useSessionStore} from "@/stores/SessionStore";
+import {onMounted, onUnmounted} from "vue";
+import {useTheme} from "vuetify/lib/framework.mjs";
+import {intervalService} from "./services/IntervalService";
 
 const theme = useTheme();
 const sessionStore = useSessionStore();

@@ -1,7 +1,7 @@
 <script lang=ts>
-import { useScheduleStore } from "@/stores/SheduleStore";
-import { useTheme } from "vuetify/lib/framework.mjs";
-import { useAudioStore } from "@/stores/AudioStore";
+import {useScheduleStore} from "@/stores/SheduleStore";
+import {useTheme} from "vuetify/lib/framework.mjs";
+import {useAudioStore} from "@/stores/AudioStore";
 
 export default {
   data: () => ({

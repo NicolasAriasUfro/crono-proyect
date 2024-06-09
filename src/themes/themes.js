@@ -1,3 +1,4 @@
+
 export const moraCremaTheme = {
     dark: false,
     colors: {
@@ -110,22 +111,22 @@ export const coffeeTheme = {
 export const temasArray = [
     {
         name: "moraCremaTheme",
-        src: require("@/assets/mora-crema.jpg"),
+        src: () => import('@/assets/mora-crema.jpg'),
     },
     {
         name: "frutosRojosTheme",
-        src: require("@/assets/frutos-rojos.jpg"),
+        src: () => import('@/assets/frutos-rojos.jpg'),
     },
     {
         name: "coffeeTheme",
-        src: require("@/assets/coffee.jpg"),
+        src: () => import('@/assets/coffee.jpg'),
     },
     {
         name: "mentaTheme",
-        src: require("@/assets/menta.jpg"),
+        src: () => import('@/assets/menta.jpg'),
     },
     {
         name: "chirimoyaAlegreTheme",
-        src: require("@/assets/chirimoya-alegre.jpg"),
+        src: () => import('@/assets/chirimoya-alegre.jpg'),
     },
 ];

@@ -1,8 +1,9 @@
 <script lang=ts>
-  import { temasArray } from '@/themes/themes.js'
-  import { useTheme } from 'vuetify/lib/framework.mjs';
-  import { useSessionStore } from '@/stores/SessionStore';
-  export default {
+import {temasArray} from '@/themes/themes.js'
+import {useTheme} from 'vuetify/lib/framework.mjs';
+import {useSessionStore} from '@/stores/SessionStore';
+
+export default {
     data: () => ({
       sessionStore: useSessionStore(),
       theme: useTheme(),

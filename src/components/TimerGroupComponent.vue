@@ -1,8 +1,8 @@
 <script lang=ts>
-import { useScheduleStore } from "@/stores/SheduleStore";
-import { useGroupStore } from "@/stores/GroupStore";
-import { useTheme } from "vuetify/lib/framework.mjs";
-import { ref, computed, reactive } from 'vue';
+import {useScheduleStore} from "@/stores/SheduleStore";
+import {useGroupStore} from "@/stores/GroupStore";
+import {useTheme} from "vuetify/lib/framework.mjs";
+import {reactive} from 'vue';
 
 export default {
     props: {

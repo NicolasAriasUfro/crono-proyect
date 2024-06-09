@@ -2,13 +2,13 @@
 import TimerComponent from "../../../crono-proyect/src/components/TimerComponent.vue";
 import GeneralManager from "../../../crono-proyect/src/components/GeneralManager.vue";
 import GeneralGroupManager from "../../../crono-proyect/src/components/GeneralGroupManager.vue";
-import { useScheduleStore } from "@/stores/SheduleStore";
-import { useGroupStore } from "@/stores/GroupStore";
+import {useScheduleStore} from "@/stores/SheduleStore";
+import {useGroupStore} from "@/stores/GroupStore";
 import TimerGroupComponent from "../../../crono-proyect/src/components/TimerGroupComponent.vue";
-import { useSessionStore } from "@/stores/SessionStore";
+import {useSessionStore} from "@/stores/SessionStore";
 import draggable from 'vuedraggable';
-import { ref } from 'vue';
-import { useAudioStore } from "@/stores/AudioStore";
+import {ref} from 'vue';
+import {useAudioStore} from "@/stores/AudioStore";
 
 export default {
   components: { GeneralManager, TimerComponent, GeneralGroupManager, TimerGroupComponent, draggable},

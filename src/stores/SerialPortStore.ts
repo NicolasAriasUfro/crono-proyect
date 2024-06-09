@@ -1,12 +1,12 @@
-import { defineStore } from "pinia";
-import { useScheduleStore } from "@/stores/SheduleStore";
+import {defineStore} from "pinia";
+import {useScheduleStore} from "@/stores/SheduleStore";
 
 export const useSerialPortStore = defineStore("serialPort", {
   state: () => ({
     port: null,
   }),
   getters: {
-    isPortOpen() {
+    isPortOpen(){
       return this.port !== null;
     },
   },

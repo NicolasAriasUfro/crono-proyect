@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { useSessionStore } from "../stores/SessionStore";
+import {useSessionStore} from "../stores/SessionStore";
 import navBar from "../../../crono-proyect/src/components/NavBar.vue";
 import footerComponent from "../../../crono-proyect/src/components/Footer.vue";
-import { ref } from "vue";
+import {ref} from "vue";
 import router from '@/router';
 
 const sessionStore = useSessionStore();

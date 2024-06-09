@@ -1,7 +1,7 @@
 <script lang=ts>
-import { useGroupStore } from "@/stores/GroupStore.js";
-import { useTheme } from "vuetify/lib/framework.mjs";
-import { useAudioStore } from "@/stores/AudioStore";
+import {useGroupStore} from "@/stores/GroupStore.js";
+import {useTheme} from "vuetify";
+import {useAudioStore} from "@/stores/AudioStore";
 
 export default {
   props: {

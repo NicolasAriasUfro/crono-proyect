@@ -1,5 +1,5 @@
 <script lang=ts>
-import { useScheduleStore } from "@/stores/SheduleStore";
+import {useScheduleStore} from "../stores/SheduleStore";
 import EditableTimerComponent from "../../../crono-proyect/src/components/EditableTimerComponent.vue";
 
 export default {
@@ -9,18 +9,18 @@ export default {
     addNewTimer() {
       useScheduleStore().addTimer(this.nameTimer, this.totalSeconds);
       this.nameTimer = "";
-      this.hh = "";
-      this.mm = "";
-      this.ss = "";
+      this.hh = 0;
+      this.mm = 0;
+      this.ss = 0;
     },
   },
   components: { EditableTimerComponent },
   data() {
     return {
       nameTimer: "",
-      hh: "",
-      mm: "",
-      ss: "",
+      hh: 0,
+      mm: 0,
+      ss: 0,
       rules: [
         (v) => v >= 0 || "No puede ser negativo",
         (v) => v <= 59 || "No puede ser mayor a 59",
@@ -38,8 +38,8 @@ export default {
     selectedSchedule() {
       return useScheduleStore().selectedSchedule;
     },
-    totalSeconds() {
-      return this.hh * 3600 + this.mm * 60 + this.ss;
+    totalSeconds() :number {
+      return Number(this.hh * 3600 + this.mm * 60 + this.ss);
     },
   },
 };

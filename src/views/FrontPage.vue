@@ -1,10 +1,10 @@
-<script setup>
-import navBar from "../../../crono-proyect/src/components/NavBar.vue";
-import footerComponent from "../../../crono-proyect/src/components/Footer.vue";
-import ThemesSelector from "../../../crono-proyect/src/components/ThemesSelector.vue";
+<script setup lang="ts">
+import navBar from "@/components/NavBar.vue";
+import footerComponent from "@/components/Footer.vue";
+import ThemesSelector from "@/components/ThemesSelector.vue";
 import router from "../router";
-import { useTheme } from "vuetify/lib/framework.mjs";
-import { useSessionStore } from "../stores/SessionStore";
+import {useTheme} from "vuetify/lib/framework.mjs";
+import {useSessionStore} from "../stores/SessionStore";
 
 const session = useSessionStore();
 const theme = useTheme();

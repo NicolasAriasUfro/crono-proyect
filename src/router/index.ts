@@ -1,15 +1,15 @@
-import { createRouter, createWebHashHistory } from "vue-router";
-import CronogramaView from "../views/CronogramaView.vue";
-import ModifyScheduleView from "../views/ModifyScheduleView.vue";
-import ConfigView from "../views/ConfigView.vue";
-import ModifyTimerView from "../views/ModifyTimerView.vue";
-import AuthView from "../views/AuthView.vue";
-import { useSessionStore } from '../stores/SessionStore';
-import HomeView from "../views/HomeView.vue";
-import FrontPage from "../views/FrontPage.vue";
-import GroupsView from "../views/GroupsView.vue";
+import {createRouter, createWebHashHistory, Router, RouteRecordRaw} from "vue-router";
+import CronogramaView from "@/views/CronogramaView.vue";
+import ModifyScheduleView from "@/views/ModifyScheduleView.vue";
+import ConfigView from "@/views/ConfigView.vue";
+import ModifyTimerView from "@/views/ModifyTimerView.vue";
+import AuthView from "@/views/AuthView.vue";
+import {useSessionStore} from '@/stores/SessionStore';
+import HomeView from "@/views/HomeView.vue";
+import FrontPage from "@/views/FrontPage.vue";
+import GroupsView from "@/views/GroupsView.vue";
 
-const routes = [
+const routes:Array<RouteRecordRaw> = [
     {
         path: "/",
         name: "frontpage",
@@ -85,7 +85,7 @@ const routes = [
     },
 ];
 
-const router = createRouter({
+const router: Router = createRouter({
     history: createWebHashHistory(),
     routes,
 });

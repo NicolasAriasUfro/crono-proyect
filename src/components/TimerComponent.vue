@@ -1,6 +1,6 @@
 <script lang=ts>
-import { useScheduleStore } from "@/stores/SheduleStore";
-import { useTheme } from "vuetify/lib/framework.mjs";
+import {useScheduleStore} from "@/stores/SheduleStore";
+import {useTheme} from "vuetify/lib/framework.mjs";
 
 export default {
   props: {

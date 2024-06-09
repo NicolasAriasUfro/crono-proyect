@@ -1,5 +1,5 @@
-import { useGroupStore } from "@/stores/GroupStore";
-import { useScheduleStore } from "@/stores/SheduleStore";
+import {useGroupStore} from "@/stores/GroupStore";
+import {useScheduleStore} from "@/stores/SheduleStore";
 
 export function intervalService() {
     useGroupStore().everySecond();

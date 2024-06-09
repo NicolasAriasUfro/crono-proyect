@@ -1,6 +1,6 @@
 <script lang=ts>
-import { useGroupStore } from '../stores/GroupStore';
-import { useSessionStore } from '../stores/SessionStore';
+import {useGroupStore} from '../stores/GroupStore';
+import {useSessionStore} from '../stores/SessionStore';
 
 export default {
     data() {
