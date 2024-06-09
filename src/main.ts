@@ -9,7 +9,7 @@ import {createVuetify} from "vuetify";
 import * as components from "vuetify/components";
 import * as directives from "vuetify/directives";
 import 'material-design-icons-iconfont/dist/material-design-icons.css';
-import {chirimoyaAlegreTheme, coffeeTheme, frutosRojosTheme, mentaTheme, moraCremaTheme,} from "./themes/themes";
+import {chirimoyaAlegreTheme, coffeeTheme, frutosRojosTheme, mentaTheme, moraCremaTheme,} from "@/themes/themes.js";
 /* import the fontawesome core */
 import {library} from "@fortawesome/fontawesome-svg-core";
 

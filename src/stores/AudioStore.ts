@@ -5,7 +5,14 @@ export const useAudioStore = defineStore("audio", {
         return {
             playing: false,
             muted: false,
-            audio: new Audio(require("@/assets/audio/elevator-music.mp3")),
+            audio_: null as HTMLAudioElement | null,
         };
     },
+    getters:{
+        async audio(state) {
+            const audioModule = await import("@/assets/audio/elevator-music.mp3");
+            state.audio_ = new Audio(audioModule.default);
+            return state.audio_;
+        }
+    }
 });
