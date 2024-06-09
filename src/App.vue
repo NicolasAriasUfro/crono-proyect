@@ -23,7 +23,6 @@ import {intervalService} from "./services/IntervalService";
 
 const theme = useTheme();
 const sessionStore = useSessionStore();
-useScheduleStore().loadFromLocalStorage();
 
 const setTheme = () => {
   theme.global.name.value = sessionStore.theme;
@@ -36,6 +35,5 @@ onMounted(() => {
 });
 onUnmounted(() => {
   useIntervalStore().stopInterval();
-  useScheduleStore().saveToLocalStorage();
 });
 </script>

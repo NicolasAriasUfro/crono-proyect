@@ -23,9 +23,7 @@ interface ScheduleStore {
 }
 export const useScheduleStore = defineStore("schedule", {
   state: (): ScheduleStore=> ({
-    /**@Type int*/
     selectedSchedule: 0,
-    /**@Type int */
     selectedTimer: 0,
     lastScheduleId: 0,
     schedules: [
@@ -38,22 +36,7 @@ export const useScheduleStore = defineStore("schedule", {
         ],
       },
     ],
-    /** @Type boolean*/
     paused: true,
-    /*
-    schedules: [
-      id: Number,
-      name: String,
-        timers: [{
-          id: Number,
-          name: String,
-          initialSeconds: Number,
-          actualSeconds: Number,
-
-        }],
-      },
-    ],
-     */
   }),
   getters: {
     lengthSchedules(): number{
@@ -110,7 +93,6 @@ export const useScheduleStore = defineStore("schedule", {
         timers: [],
       };
       this.schedules.push(newSchedule);
-      this.saveToLocalStorage();
       return newSchedule;
     },
     removeSchedule(idSchedule:number){
@@ -132,7 +114,6 @@ export const useScheduleStore = defineStore("schedule", {
       };
       //add the timer
       this.schedules[this.selectedSchedule].timers.push(newTimer);
-      this.saveToLocalStorage();
       return newTimer;
     },
     removeTimer(idSchedule: number, idTimer: number) {
@@ -154,7 +135,6 @@ export const useScheduleStore = defineStore("schedule", {
       if (index !== -1) {
         this.schedules[this.selectedSchedule].timers.splice(index, 1);
       }
-      this.saveToLocalStorage();
     },
     decreaseTimer(idTimer:number, seconds:number) {
       const selectedSchedule =
@@ -190,8 +170,6 @@ export const useScheduleStore = defineStore("schedule", {
       for (let i = 0; i < timers.length; i++) {
         timers[i].actualSeconds = timers[i].initialSeconds;
       }
-
-      this.saveToLocalStorage();
     },
     changeTimerName(idTimer: number, newName: string) {
       const selectedSchedule = this.schedules[this.selectedSchedule];
@@ -202,36 +180,7 @@ export const useScheduleStore = defineStore("schedule", {
       if (timerIndex !== -1) {
         selectedSchedule.timers[timerIndex].name = newName;
       }
-      this.saveToLocalStorage();
-    },
-    loadFromLocalStorage() {
-      const storedSchedules = localStorage.getItem("schedules");
-      if (storedSchedules) {
-        this.schedules = JSON.parse(storedSchedules);
-      }
-      const selectedSchedule = localStorage.getItem("selectedSchedule");
-      if (selectedSchedule) {
-        this.selectedSchedule = parseInt(selectedSchedule);
-      }
-      const selectedTimer = localStorage.getItem("selectedTimer");
-      if (selectedTimer) {
-        this.selectedTimer = parseInt(selectedTimer);
-      }
-      const paused = localStorage.getItem("paused");
-      if (paused) {
-        this.paused = paused === "true";
-      }
-      const lastScheduleId = localStorage.getItem("lastScheduleId");
-      if (lastScheduleId) {
-        this.lastScheduleId = parseInt(lastScheduleId);
-      }
-    },
-    saveToLocalStorage() {
-      localStorage.setItem("schedules", JSON.stringify(this.schedules));
-      localStorage.setItem("selectedSchedule", String(this.selectedSchedule));
-      localStorage.setItem("selectedTimer", String(this.selectedTimer));
-      localStorage.setItem("paused", String(this.paused));
-      localStorage.setItem("lastScheduleId", String(this.lastScheduleId));
     },
   },
+  persist: true,
 });
