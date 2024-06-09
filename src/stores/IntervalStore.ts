@@ -14,7 +14,7 @@ export const useIntervalStore = defineStore("interval", {
       }
 
       // Inicia un nuevo intervalo
-      this.intervalId = setInterval(callback, interval);
+      this.intervalId = Number(setInterval(callback, interval));
     },
     stopInterval() {
       // Detiene el intervalo en ejecución
