@@ -109,13 +109,27 @@ export default {
         <strong>{{ formattedInitialTime }}</strong>
       </v-col>
       <v-col>
-        <v-select :items="timerOptions"></v-select>
+        <v-select :items="timerOptions" />
       </v-col>
       <v-col>
         <v-form @click.prevent>
-          <v-text-field label="Nuevo nombre" v-model="timeName"></v-text-field>
-          <v-btn color="success_light_1" @click="changeTimerName" :disabled="timeName===''">cambiar nombre</v-btn>
-          <v-btn color="success_light_1" @click="deleteTimer">eliminar</v-btn>
+          <v-text-field
+            v-model="timeName"
+            label="Nuevo nombre"
+          />
+          <v-btn
+            color="success_light_1"
+            :disabled="timeName===''"
+            @click="changeTimerName"
+          >
+            cambiar nombre
+          </v-btn>
+          <v-btn
+            color="success_light_1"
+            @click="deleteTimer"
+          >
+            eliminar
+          </v-btn>
         </v-form>
       </v-col>
     </v-row>

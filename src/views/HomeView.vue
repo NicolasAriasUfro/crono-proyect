@@ -7,7 +7,7 @@ import router from '@/router';
 
 const sessionStore = useSessionStore();
 const userName = sessionStore.userName;
-let login = ref(sessionStore.token != null);
+const login = ref(sessionStore.token != null);
 
 const logIn = () => {
   router.push({ name: "auth" });
@@ -18,18 +18,40 @@ const logIn = () => {
   <v-app-bar app>
     <navBar />
   </v-app-bar>
-  <v-main grid-list-xs class="content-container">
+  <v-main
+    grid-list-xs
+    class="content-container"
+  >
     <div class="tabs-container">
-      <v-tabs bg-color="primary_light_1" color="blue-grey-lighten-5" align-tabs="center" class="bg-blue-grey tabs"
-        show-arrows center-active>
-        <v-tab to="cronograma">Cronograma</v-tab>
-        <v-tab to="mis-temporizadores">Mis Temporizadores</v-tab>
-        <v-tab to="mis-cronogramas">Mis Cronogramas</v-tab>
-        <v-tab to="grupos">Grupos</v-tab>
-        <v-tab to="configuracion">Configuración</v-tab>
+      <v-tabs
+        bg-color="primary_light_1"
+        color="blue-grey-lighten-5"
+        align-tabs="center"
+        class="bg-blue-grey tabs"
+        show-arrows
+        center-active
+      >
+        <v-tab to="cronograma">
+          Cronograma
+        </v-tab>
+        <v-tab to="mis-temporizadores">
+          Mis Temporizadores
+        </v-tab>
+        <v-tab to="mis-cronogramas">
+          Mis Cronogramas
+        </v-tab>
+        <v-tab to="grupos">
+          Grupos
+        </v-tab>
+        <v-tab to="configuracion">
+          Configuración
+        </v-tab>
       </v-tabs>
     </div>
-    <v-container fluid class="elevation-1 content-wrapper">
+    <v-container
+      fluid
+      class="elevation-1 content-wrapper"
+    >
       <RouterView />
     </v-container>
     <footerComponent />

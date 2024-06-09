@@ -95,39 +95,49 @@ export default {
 </script>
 
 <template>
-    <v-card
-        :color="selectedTimer ? 'success_light_1' : 'secondary_light_2'"
-        elevated
-        ma-2
-        class="timer rounded"
-        :class="{
-        priorizada: esPrioritaria,
-        eliminada: isDeleted,
-        startedTimer: isActive,
-        'bg-green': isActive,
-        'elevation-20': isActive,
-        }"
-    >
-        <v-row>
-            <v-col>
-                <h3>{{ name }}</h3>
-                <strong> {{ formattedActualTime }} / {{ formattedInitialTime }}</strong>
-                <!-- <div v-if="isEditable">time interval = {{ timerInterval }}</div> -->
-            </v-col>
-            <v-col>
-                <v-select :items="timerOptions"></v-select>
-            </v-col>
-            <v-col>
-                <v-btn v-if="isEditable" @click="deleteTimer">eliminar</v-btn>
-            </v-col>
-        </v-row>
-        <v-row>
-            <v-col>
-                <v-progress-linear v-model=progress color="success" height="6" class="smooth-progress"></v-progress-linear>
-            </v-col>
-        </v-row>
-    </v-card>
-    </template>
+  <v-card
+    :color="selectedTimer ? 'success_light_1' : 'secondary_light_2'"
+    elevated
+    ma-2
+    class="timer rounded"
+    :class="{
+      priorizada: esPrioritaria,
+      eliminada: isDeleted,
+      startedTimer: isActive,
+      'bg-green': isActive,
+      'elevation-20': isActive,
+    }"
+  >
+    <v-row>
+      <v-col>
+        <h3>{{ name }}</h3>
+        <strong> {{ formattedActualTime }} / {{ formattedInitialTime }}</strong>
+        <!-- <div v-if="isEditable">time interval = {{ timerInterval }}</div> -->
+      </v-col>
+      <v-col>
+        <v-select :items="timerOptions" />
+      </v-col>
+      <v-col>
+        <v-btn
+          v-if="isEditable"
+          @click="deleteTimer"
+        >
+          eliminar
+        </v-btn>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
+        <v-progress-linear
+          v-model="progress"
+          color="success"
+          height="6"
+          class="smooth-progress"
+        />
+      </v-col>
+    </v-row>
+  </v-card>
+</template>
 
 <style scoped>
 * {

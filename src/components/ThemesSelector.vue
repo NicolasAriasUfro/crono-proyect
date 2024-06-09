@@ -31,51 +31,63 @@ export default defineComponent({
 
 <template>
   <v-dialog max-width="500">
-    <template v-slot:activator="{ props: activatorProps }">
+    <template #activator="{ props: activatorProps }">
       <v-btn
-          v-bind="activatorProps"
-          color="primary"
-          text="Temas"
-          variant="flat"
+        v-bind="activatorProps"
+        color="primary"
+        text="Temas"
+        variant="flat"
       >
         Temas
       </v-btn>
     </template>
 
-    <template v-slot:default="{ isActive }">
-      <v-card color="background" title="Seleccione un Tema">
-        <v-divider class="mx-15" color="surface"></v-divider>
+    <template #default="{ isActive }">
+      <v-card
+        color="background"
+        title="Seleccione un Tema"
+      >
+        <v-divider
+          class="mx-15"
+          color="surface"
+        />
         <v-sheet
-            color="background"
-            class="mx-auto"
-            max-width="100%"
+          color="background"
+          class="mx-auto"
+          max-width="100%"
         >
           <v-slide-group
-              background-color="primary"
-              v-model="model"
-              class="pa-4"
-              center-active
-              show-arrows
+            v-model="model"
+            background-color="primary"
+            class="pa-4"
+            center-active
+            show-arrows
           >
             <v-slide-group-item
-                v-for="(tema, n) in temasArray"
-                :key="n"
-                v-slot="{ isSelected, toggle }"
+              v-for="(tema, n) in temasArray"
+              :key="n"
+              v-slot="{ isSelected, toggle }"
             >
               <v-card
-                  :color="isSelected ? 'success' : 'background'"
-                  :image="tema.src"
-                  class="ma-4"
-                  height="200"
-                  width="100"
-                  @click="toggle"
-                  overflow
-                  centered
-                  hover
+                :color="isSelected ? 'success' : 'background'"
+                :image="tema.src"
+                class="ma-4"
+                height="200"
+                width="100"
+                overflow
+                centered
+                hover
+                @click="toggle"
               >
                 <div class="d-flex fill-height align-center justify-center">
                   <v-scale-transition>
-                    <font-awesome-icon v-if="isSelected" id="card-selector" width="20px" color="primary" icon="fa-solid fa-circle-check"/>
+                    <font-awesome-icon
+                      v-if="isSelected"
+                      id="card-selector"
+                      width="20px"
+                      color="primary"
+                      icon="fa-solid fa-circle-check"
+                    />
                   </v-scale-transition>
                 </div>
               </v-card>
@@ -84,13 +96,24 @@ export default defineComponent({
         </v-sheet>
 
         <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn @click="selectTheme(model); isActive.value = false;" color="success">Elegir</v-btn>
-          <v-divider class="mx-3" color="primary" vertical></v-divider>
+          <v-spacer />
           <v-btn
-              color="success"
-              @click="isActive.value = false"
-          >Volver</v-btn>
+            color="success"
+            @click="selectTheme(model); isActive.value = false;"
+          >
+            Elegir
+          </v-btn>
+          <v-divider
+            class="mx-3"
+            color="primary"
+            vertical
+          />
+          <v-btn
+            color="success"
+            @click="isActive.value = false"
+          >
+            Volver
+          </v-btn>
         </v-card-actions>
       </v-card>
     </template>

@@ -15,6 +15,9 @@ export default {
     theme: useTheme(),
     audio: useAudioStore().audio,
   }),
+  beforeUpdate() {
+    this.useGroupStore().selectedGroup = this.groupId;
+  },
   methods: {
     useGroupStore,
     playAudio() {
@@ -47,31 +50,58 @@ export default {
       this.audioStore.playing = false;
       useGroupStore().resetAllTimers();
     },
-  },
-  beforeUpdate() {
-    this.useGroupStore().selectedGroup = this.groupId;
   }
 };
 </script>
 
 <template>
   <div class="general-bar">
-    <button v-if="useGroupStore().paused" @click.prevent="generalPlay">
-      <font-awesome-icon class="icon" icon="fa-solid fa-play" />
+    <button
+      v-if="useGroupStore().paused"
+      @click.prevent="generalPlay"
+    >
+      <font-awesome-icon
+        class="icon"
+        icon="fa-solid fa-play"
+      />
     </button>
-    <button v-else @click.prevent="generalPause">
-      <font-awesome-icon class="icon" icon="fa-solid fa-pause" />
+    <button
+      v-else
+      @click.prevent="generalPause"
+    >
+      <font-awesome-icon
+        class="icon"
+        icon="fa-solid fa-pause"
+      />
     </button>
     <button @click.prevent="generalReset">
-      <font-awesome-icon class="icon" icon="fa-solid fa-stop" />
+      <font-awesome-icon
+        class="icon"
+        icon="fa-solid fa-stop"
+      />
     </button>
-    <v-divider class="ms-3 divider" vertical ></v-divider>
+    <v-divider
+      class="ms-3 divider"
+      vertical
+    />
     <div class="ml-10">
-      <button v-if="!audioStore.muted" @click.prevent="muteAudio">
-        <font-awesome-icon class="icon" icon="fa-solid fa-volume-high"/>
+      <button
+        v-if="!audioStore.muted"
+        @click.prevent="muteAudio"
+      >
+        <font-awesome-icon
+          class="icon"
+          icon="fa-solid fa-volume-high"
+        />
       </button>
-      <button v-else @click.prevent="unMuteAudio">
-        <font-awesome-icon class="icon" icon="fa-solid fa-volume-xmark" />
+      <button
+        v-else
+        @click.prevent="unMuteAudio"
+      >
+        <font-awesome-icon
+          class="icon"
+          icon="fa-solid fa-volume-xmark"
+        />
       </button>
     </div>
   </div>

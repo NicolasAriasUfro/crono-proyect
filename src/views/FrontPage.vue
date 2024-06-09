@@ -32,28 +32,69 @@ const ingresar = () => {
   <v-app-bar app>
     <navBar />
   </v-app-bar>
-  <v-main grid-list-sm fluid class="main-container">
-    <v-container grid-list-xs fluid class="px-16 first-container align-content-center">
+  <v-main
+    grid-list-sm
+    fluid
+    class="main-container"
+  >
+    <v-container
+      grid-list-xs
+      fluid
+      class="px-16 first-container align-content-center"
+    >
       <v-row>
-        <v-col cols="12" md="6" class="d-flex flex-column align-end">
-          <img :src="clockImage" alt="clock-image" class="main-clock">
+        <v-col
+          cols="12"
+          md="6"
+          class="d-flex flex-column align-end"
+        >
+          <img
+            :src="clockImage"
+            alt="clock-image"
+            class="main-clock"
+          >
         </v-col>
-        <v-col cols="12" md="6" class="d-flex flex-column align-start justify-center px-16 text-left">
-          <h1 class="gradient">CronoProyect</h1>
+        <v-col
+          cols="12"
+          md="6"
+          class="d-flex flex-column align-start justify-center px-16 text-left"
+        >
+          <h1 class="gradient">
+            CronoProyect
+          </h1>
           <p>
             CronoProyect es una aplicación poderosa e intuitiva diseñada para ayudarte a planificar y cronometrar cada parte de tus presentaciones con facilidad!
             Ya seas profesor, estudiante, profesional de negocios o orador público, esta aplicación te garantiza que te mantengas en el camino correcto y saques el máximo provecho de tu tiempo de presentación.
           </p>
           <div class="mt-5">
-            <v-btn v-if="session.token == null" @click="login" color="success">Ingresar</v-btn>
-            <v-btn v-else @click="ingresar" color="success">Ingresar</v-btn>
+            <v-btn
+              v-if="session.token == null"
+              color="success"
+              @click="login"
+            >
+              Ingresar
+            </v-btn>
+            <v-btn
+              v-else
+              color="success"
+              @click="ingresar"
+            >
+              Ingresar
+            </v-btn>
           </div>
         </v-col>
       </v-row>
     </v-container>
-    <v-container grid-list-sm class="second-container">
+    <v-container
+      grid-list-sm
+      class="second-container"
+    >
       <v-row class="mb-10">
-        <v-col cols="12" md="6" class="d-flex align-center text-left">
+        <v-col
+          cols="12"
+          md="6"
+          class="d-flex align-center text-left"
+        >
           <div>
             <h3>Gestiona tus horarios</h3>
             <p>
@@ -62,15 +103,37 @@ const ingresar = () => {
             </p>
           </div>
         </v-col>
-        <v-col cols="12" md="6">
-          <v-img rounded contain max-width="550" class="img-second-ctn" :src="demoCronograma"></v-img>
+        <v-col
+          cols="12"
+          md="6"
+        >
+          <v-img
+            rounded
+            contain
+            max-width="550"
+            class="img-second-ctn"
+            :src="demoCronograma"
+          />
         </v-col>
       </v-row>
       <v-row class="mb-10">
-        <v-col cols="12" md="6">
-          <v-img rounded contain max-width="550" class="img-second-ctn" :src="demoCreacionTmp"></v-img>
+        <v-col
+          cols="12"
+          md="6"
+        >
+          <v-img
+            rounded
+            contain
+            max-width="550"
+            class="img-second-ctn"
+            :src="demoCreacionTmp"
+          />
         </v-col>
-        <v-col cols="12" md="6" class="d-flex align-center text-left">
+        <v-col
+          cols="12"
+          md="6"
+          class="d-flex align-center text-left"
+        >
           <div>
             <h3>Agrega horarios adicionales</h3>
             <p>
@@ -81,7 +144,11 @@ const ingresar = () => {
         </v-col>
       </v-row>
       <v-row class="mb-10">
-        <v-col cols="12" md="6" class="d-flex align-center text-left">
+        <v-col
+          cols="12"
+          md="6"
+          class="d-flex align-center text-left"
+        >
           <div>
             <h3>Personaliza tu aplicación</h3>
             <p class="mb-3">
@@ -91,16 +158,45 @@ const ingresar = () => {
             <ThemesSelector />
           </div>
         </v-col>
-        <v-col cols="12" md="6" class="d-flex">
-          <v-img rounded contain max-width="550" class="img-second-ctn mr-3" :src="demoTheme"></v-img>
-          <v-img rounded contain max-width="550" class="img-second-ctn" :src="demoTheme1"></v-img>
+        <v-col
+          cols="12"
+          md="6"
+          class="d-flex"
+        >
+          <v-img
+            rounded
+            contain
+            max-width="550"
+            class="img-second-ctn mr-3"
+            :src="demoTheme"
+          />
+          <v-img
+            rounded
+            contain
+            max-width="550"
+            class="img-second-ctn"
+            :src="demoTheme1"
+          />
         </v-col>
       </v-row>
       <v-row class="mb-10">
-        <v-col cols="12" md="6">
-          <v-img rounded contain max-width="550" class="img-second-ctn" :src="demoGroups"></v-img>
+        <v-col
+          cols="12"
+          md="6"
+        >
+          <v-img
+            rounded
+            contain
+            max-width="550"
+            class="img-second-ctn"
+            :src="demoGroups"
+          />
         </v-col>
-        <v-col cols="12" md="6" class="d-flex align-center text-left">
+        <v-col
+          cols="12"
+          md="6"
+          class="d-flex align-center text-left"
+        >
           <div>
             <h3>Únete a grupos existentes</h3>
             <p>
@@ -110,9 +206,16 @@ const ingresar = () => {
         </v-col>
       </v-row>
       <v-row class="d-flex flex-column justify-center my-10">
-        <h3 class="mb-3">¡Comienza ahora!</h3>
+        <h3 class="mb-3">
+          ¡Comienza ahora!
+        </h3>
         <div>
-          <v-btn @click="login" color="success">Ingresar</v-btn>
+          <v-btn
+            color="success"
+            @click="login"
+          >
+            Ingresar
+          </v-btn>
         </div>
       </v-row>
     </v-container>

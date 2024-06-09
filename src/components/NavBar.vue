@@ -25,27 +25,56 @@ const frontPage = () => {
 </script>
 
 <template>
-  <v-toolbar class="px-5 elevation-4" id="navbar" color="primary">
-    <template v-slot:prepend>
+  <v-toolbar
+    id="navbar"
+    class="px-5 elevation-4"
+    color="primary"
+  >
+    <template #prepend>
       <div class="text-h5">
-        <button @click="frontPage" text="CronoProyect" color="primary">CronoProyect</button>
+        <button
+          text="CronoProyect"
+          color="primary"
+          @click="frontPage"
+        >
+          CronoProyect
+        </button>
       </div>
     </template>
-    <v-divider class="ms-3" color="background" inset vertical></v-divider>
+    <v-divider
+      class="ms-3"
+      color="background"
+      inset
+      vertical
+    />
     <v-toolbar-title class="d-flex text-left align-center">
       {{ userName }}
     </v-toolbar-title>
 
-    <v-spacer></v-spacer>
+    <v-spacer />
 
     <v-toolbar-items>
       <ThemesSelector />
 
-      <v-divider vertical></v-divider>
+      <v-divider vertical />
 
       <div class="d-flex">
-        <v-btn v-if="sessionStore.token != null" @click="logOut" class="login-btn" variant="text">Logout</v-btn>
-        <v-btn v-else @click="logIn" class="login-btn" variant="text">LogIn</v-btn>
+        <v-btn
+          v-if="sessionStore.token != null"
+          class="login-btn"
+          variant="text"
+          @click="logOut"
+        >
+          Logout
+        </v-btn>
+        <v-btn
+          v-else
+          class="login-btn"
+          variant="text"
+          @click="logIn"
+        >
+          LogIn
+        </v-btn>
       </div>
     </v-toolbar-items>
   </v-toolbar>

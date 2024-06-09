@@ -106,13 +106,20 @@ export default {
       <v-col class="showtime">
         <h3>{{ name }}</h3>
         <strong> {{ formattedActualTime }} / {{ formattedInitialTime }}</strong>
-        <div v-if="isEditable">time interval = {{ timerInterval }}</div>
+        <div v-if="isEditable">
+          time interval = {{ timerInterval }}
+        </div>
       </v-col>
       <v-col>
-        <v-select :items="timerOptions"></v-select>
+        <v-select :items="timerOptions" />
       </v-col>
       <v-col>
-        <v-btn v-if="isEditable" @click="deleteTimer">eliminar</v-btn>
+        <v-btn
+          v-if="isEditable"
+          @click="deleteTimer"
+        >
+          eliminar
+        </v-btn>
       </v-col>
     </v-row>
   </v-card>

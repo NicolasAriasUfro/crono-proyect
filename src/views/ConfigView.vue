@@ -22,14 +22,22 @@ export default {
 <template>
   <h1>Configuración</h1>
   <h2>Conexión a un puerto COM</h2>
-  <v-btn color="success" @click="selectReciverData" v-if="!useSerialPortStore().isPortOpen"
-    >Elegir Puerto</v-btn
+  <v-btn
+    v-if="!useSerialPortStore().isPortOpen"
+    color="success"
+    @click="selectReciverData"
   >
+    Elegir Puerto
+  </v-btn>
   <v-container v-if="useSerialPortStore().isPortOpen">
-    <v-btn @click="changePort">Cambiar</v-btn>
-    <v-btn @click="disconnectPort">Desconectar</v-btn>
+    <v-btn @click="changePort">
+      Cambiar
+    </v-btn>
+    <v-btn @click="disconnectPort">
+      Desconectar
+    </v-btn>
   </v-container>
-  <v-divider class="ma-4"></v-divider>
+  <v-divider class="ma-4" />
 </template>
 
 <style scoped></style>

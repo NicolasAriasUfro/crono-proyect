@@ -31,12 +31,20 @@ export default {
 
 
 <template>
-    <div class="my-3">
-        <v-btn @click="loginGoogle" color="background" id="google-btn" rounded border="md">
-            <font-awesome-icon id="google-icon" icon="fa-brands fa-google" />
-        </v-btn>
-        
-    </div>
+  <div class="my-3">
+    <v-btn
+      id="google-btn"
+      color="background"
+      rounded
+      border="md"
+      @click="loginGoogle"
+    >
+      <font-awesome-icon
+        id="google-icon"
+        icon="fa-brands fa-google"
+      />
+    </v-btn>
+  </div>
 </template>
 
 <style>

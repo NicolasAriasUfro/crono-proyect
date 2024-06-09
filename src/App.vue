@@ -4,15 +4,6 @@
   </v-app>
 </template>
 
-<style>
-#app {
-  text-align: center;
-}
-html, body, #app {
-  height: 100%;
-  margin: 0;
-}
-</style>
 <script setup lang="ts">
 import {useIntervalStore} from "@/stores/IntervalStore";
 import {useScheduleStore} from "@/stores/SheduleStore";
@@ -37,3 +28,12 @@ onUnmounted(() => {
   useIntervalStore().stopInterval();
 });
 </script>
+<style>
+#app {
+  text-align: center;
+}
+html, body, #app {
+  height: 100%;
+  margin: 0;
+}
+</style>

@@ -77,14 +77,24 @@ export default {
 <template>
   <div>
     <h5>Chronometer</h5>
-    <div class="chronometer"></div>
+    <div class="chronometer" />
     {{ formattedTime }}
     <div>
-      <button v-if="!started" @click="startCrono">Start</button>
-      <button v-else @click="pauseManager">
+      <button
+        v-if="!started"
+        @click="startCrono"
+      >
+        Start
+      </button>
+      <button
+        v-else
+        @click="pauseManager"
+      >
         {{ paused ? "Continue" : "Pause" }}
       </button>
-      <button @click="resetCrono">Reset</button>
+      <button @click="resetCrono">
+        Reset
+      </button>
     </div>
   </div>
 </template>
