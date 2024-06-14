@@ -1,7 +1,7 @@
 <script lang=ts>
 import {useScheduleStore} from "@/stores/SheduleStore";
 import {useTheme} from "vuetify";
-import {TimerAccion} from "@/types.ts";
+import {TimerBehavior} from "@/types.ts";
 import {$enum} from "ts-enum-util";
 
 export default {
@@ -18,7 +18,7 @@ export default {
   data() {
     return {
       theme: useTheme(),
-      timerOptions: $enum(TimerAccion).getValues(),
+      timerOptions: $enum(TimerBehavior).getValues(),
       timerInterval: null,
       esPrioritaria: false,
       isDeleted: false,

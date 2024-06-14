@@ -1,4 +1,4 @@
-export enum TimerAccion {
+export enum TimerBehavior {
     NORMAL="Normal",
     SKIP = "Omitir",
     IMPORTANT="Priorizar",
@@ -9,7 +9,7 @@ export interface Timer {
     name: string;
     initialSeconds: number;
     actualSeconds: number;
-    status: TimerAccion;
+    behavior: TimerBehavior;
 }
 export interface Schedule {
     id: number;
