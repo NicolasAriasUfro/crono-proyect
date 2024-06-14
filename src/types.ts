@@ -1,8 +1,8 @@
 export enum TimerBehavior {
-    NORMAL="Normal",
-    SKIP = "Omitir",
-    IMPORTANT="Priorizar",
-    OPTIONAL = "Opcional"
+    Normal="Al terminar el tiempo asignado, continúa con  el siguiente",
+    Opcional = "Se activa solo si hay tiempo suficiente.",
+    Omitir = "Pasa inmediatamente al siguiente.",
+    Importante="Necesita pasar al siguiente manualmente."
 }
 export interface Timer {
     id: number;

@@ -4,6 +4,10 @@ import {useTheme} from "vuetify";
 import {TimerBehavior} from "@/types.ts";
 import {$enum} from "ts-enum-util";
 
+interface Options{
+  title:string,
+  subtitle:string,
+}
 export default {
   props: {
     isEditable: {
@@ -18,7 +22,8 @@ export default {
   data() {
     return {
       theme: useTheme(),
-      timerOptions: $enum(TimerBehavior).getValues(),
+      timerSubtitle: $enum(TimerBehavior).keys(),
+      timerTitle: $enum(TimerBehavior).getKeys(),
       timerInterval: null,
       esPrioritaria: false,
       isDeleted: false,
@@ -26,6 +31,18 @@ export default {
     };
   },
   computed: {
+    timerObjects():Options[]{
+      let objects:Options[] = [];
+      let opt:Options;
+      for (let i = 0; i < this.timerSubtitle.length; i++) {
+        opt = {
+          title: this.timerTitle.at(i) || "",
+          subtitle: this.timerSubtitle.at(i) || "",
+        }
+        objects.push(opt)
+      }
+      return objects
+    },
     formattedActualTime() {
       const isNegativeTime = this.actualSeconds < 0;
       let seconds = this.actualSeconds;
@@ -113,7 +130,7 @@ export default {
         </div>
       </v-col>
       <v-col>
-        <v-select :items="timerOptions" />
+        <v-select :item-props="true" :items="timerObjects" />
       </v-col>
       <v-col>
         <v-btn
