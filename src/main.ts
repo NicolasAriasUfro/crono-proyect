@@ -56,7 +56,7 @@ pinia.use(piniaPluginPersistedState);
 
 /* Firebase */
 const firebaseConfig = {
-    apiKey: process.env.VUE_APP_FIREBASE_KEY,
+    apiKey: import.meta.env.VITE_FIREBASE_KEY,
     authDomain: "cronocoso.firebaseapp.com",
     projectId: "cronocoso",
     storageBucket: "cronocoso.appspot.com",

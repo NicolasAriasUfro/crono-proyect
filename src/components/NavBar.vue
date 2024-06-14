@@ -12,8 +12,8 @@ const logIn = () => {
   router.push({ name: "auth" });
 }
 
-const logOut = () => {
-  audioStore.audio.pause();
+const logOut = async () => {
+  (await audioStore.audio).pause();
   sessionStore.$reset();
   audioStore.$reset();
   router.push({ name: "frontpage" });

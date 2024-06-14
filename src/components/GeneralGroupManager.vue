@@ -20,21 +20,21 @@ export default {
   },
   methods: {
     useGroupStore,
-    playAudio() {
-        this.audio.volume = 0.2;
-        this.audio.loop = true;
-        this.audio.play();
+    async playAudio() {
+        (await this.audio).volume = 0.2;
+        (await this.audio).loop = true;
+        (await this.audio).play();
         this.audioStore.playing = true;
     },
-    pauseAudio() {
-      this.audio.pause();
+    async pauseAudio() {
+      (await this.audio).pause();
     },
-    muteAudio() {
-      this.audio.muted = true;
+    async muteAudio() {
+      (await this.audio).muted = true;
       this.audioStore.muted = true;
     },
-    unMuteAudio() {
-      this.audio.muted = false;
+    async unMuteAudio() {
+      (await this.audio).muted = false;
       this.audioStore.muted = false;
     },
     generalPause() {
@@ -129,4 +129,4 @@ button {
 .icon {
   color: var(--primary) !important;
 }
-</style>
+</style>(await this.audio)(await this.audio)(await this.audio)(await this.audio)(await this.audio)(await this.audio)(await this.audio)(await this.audio)(await this.audio)(await this.audio)(await this.audio)(await this.audio)async async async 

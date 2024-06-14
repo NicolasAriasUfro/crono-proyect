@@ -108,25 +108,31 @@ export const coffeeTheme = {
     },
 };
 
-export const temasArray = [
+import moraCremaImg from '@/assets/mora-crema.jpg';
+import frutosRojosImg from '@/assets/frutos-rojos.jpg';
+import coffeeImg from '@/assets/coffee.jpg';
+import mentaImg from '@/assets/menta.jpg';
+import chirimoyaAlegreImg from '@/assets/chirimoya-alegre.jpg';
+
+export const temasArray: {name: string; src: string;}[] = [
     {
         name: "moraCremaTheme",
-        src: () => import('@/assets/mora-crema.jpg'),
+        src: moraCremaImg,
     },
     {
         name: "frutosRojosTheme",
-        src: () => import('@/assets/frutos-rojos.jpg'),
+        src: frutosRojosImg,
     },
     {
         name: "coffeeTheme",
-        src: () => import('@/assets/coffee.jpg'),
+        src: coffeeImg,
     },
     {
         name: "mentaTheme",
-        src: () => import('@/assets/menta.jpg'),
+        src: mentaImg,
     },
     {
         name: "chirimoyaAlegreTheme",
-        src: () => import('@/assets/chirimoya-alegre.jpg'),
+        src: chirimoyaAlegreImg,
     },
 ];

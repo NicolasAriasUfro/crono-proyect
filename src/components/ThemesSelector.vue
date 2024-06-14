@@ -22,7 +22,8 @@ export default defineComponent({
   methods: {
     selectTheme(selectionValue: number) {
       const selectedTheme = this.temasArray[selectionValue];
-      this.theme.global.name.value = selectedTheme.name;
+      //ignore this. https://github.com/vuetifyjs/vuetify/issues/17542
+      this.theme.global.name = selectedTheme.name; 
       this.sessionStore.theme = selectedTheme.name;
     }
   }
