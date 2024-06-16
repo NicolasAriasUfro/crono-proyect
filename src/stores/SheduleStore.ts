@@ -1,13 +1,13 @@
 import {useSerialPortStore} from "./SerialPortStore.ts";
 import {defineStore} from "pinia";
 import {Schedule, Timer, TimerBehavior} from "@/types.ts";
+import {useTimeManagerStore} from "@/stores/TimeManagerStore.ts";
 
 interface ScheduleStore {
     selectedSchedule: number;
     selectedTimer: number;
     lastScheduleId: number;
     schedules: Schedule[];
-    paused: boolean;
 }
 
 export const useScheduleStore = defineStore("schedule", {
@@ -25,7 +25,6 @@ export const useScheduleStore = defineStore("schedule", {
         ],
       },
     ],
-    paused: true,
   }),
   getters: {
     quantity(state): number{
@@ -45,7 +44,7 @@ export const useScheduleStore = defineStore("schedule", {
         .actualSeconds;
     },
     everySecond() {
-      if (!this.paused) {
+      if (!useTimeManagerStore().isPaused) {
         if (
           this.schedules[this.selectedSchedule].timers[this.selectedTimer]
             .actualSeconds <= 0
@@ -66,7 +65,7 @@ export const useScheduleStore = defineStore("schedule", {
         this.selectedTimer >=
         this.schedules[this.selectedSchedule].timers.length - 1
       ) {
-        this.paused = true;
+        useTimeManagerStore().setPausedTrue();
         console.log("terminó");
         this.selectedTimer = 0;
       } else {

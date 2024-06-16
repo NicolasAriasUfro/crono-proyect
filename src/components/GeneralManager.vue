@@ -2,6 +2,7 @@
 import {useScheduleStore} from "@/stores/SheduleStore";
 import {useTheme} from "vuetify/lib/framework.mjs";
 import {useAudioStore} from "@/stores/AudioStore";
+import {useTimeManagerStore} from "@/stores/TimeManagerStore.ts";
 
 export default {
   data: () => ({
@@ -10,6 +11,7 @@ export default {
     audio: useAudioStore().audio,
   }),
   methods: {
+    useTimeManagerStore,
     useScheduleStore,
     playAudio() {
         this.audio.volume = 0.2;
@@ -29,11 +31,11 @@ export default {
       this.audioStore.muted = false;
     },
     generalPause() {
-      useScheduleStore().paused = true;
+      useTimeManagerStore().setPausedTrue();
       this.pauseAudio();
     },
     generalPlay() {
-      useScheduleStore().paused = false;
+      useTimeManagerStore().setPausedFalse();
       this.playAudio();
     },
     generalReset() {
@@ -48,7 +50,7 @@ export default {
 <template>
   <div class="general-bar">
     <button
-      v-if="useScheduleStore().paused"
+      v-if="useTimeManagerStore().isPaused"
       @click.prevent="generalPlay"
     >
       <font-awesome-icon

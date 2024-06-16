@@ -9,6 +9,7 @@ import {useSessionStore} from "@/stores/SessionStore";
 import draggable from 'vuedraggable';
 import {ref} from 'vue';
 import {useAudioStore} from "@/stores/AudioStore";
+import {useTimeManagerStore} from "@/stores/TimeManagerStore.ts";
 
 export default {
   components: { GeneralManager, TimerComponent, GeneralGroupManager, TimerGroupComponent, draggable},
@@ -58,7 +59,7 @@ export default {
     resetAllTimers() {
       this.currentTimerIndex = 0;
       const timersRefs = this.$refs.timers;
-      useScheduleStore().paused = true;
+      useTimeManagerStore().setPausedTrue();
 
       timersRefs.forEach((timer) => {
         timer.resetTimer();
