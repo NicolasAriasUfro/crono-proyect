@@ -80,6 +80,8 @@ library.add(faVolumeHigh);
 library.add(faVolumeXmark);
 library.add(faGithub);
 
+export const API_ROUTE = 'http://localhost:8000';
+//export const API_ROUTE = 'https://crono-proyect.shuttleapp.rs';
 
 createApp(App)
     .component("font-awesome-icon", FontAwesomeIcon)

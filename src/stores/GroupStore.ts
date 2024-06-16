@@ -1,3 +1,5 @@
+import { API_ROUTE } from "@/main";
+import axios from "axios";
 import {defineStore} from "pinia";
 
 export const useGroupStore = defineStore("group", {
@@ -114,6 +116,7 @@ export const useGroupStore = defineStore("group", {
                 ],
             },
         ],
+        groupsArray: [],
         paused: true,
         selectedSchedule: 0,
         selectedTimer: 0,
@@ -121,6 +124,15 @@ export const useGroupStore = defineStore("group", {
         selectedGroup: 0,
     }),
     actions: {
+        async fetchGroups(userId: number) {
+            try {
+                const groups = await axios.get(`${API_ROUTE}/api/groups/user/${userId}`)
+                console.log(groups.data);
+            } catch (why) {
+                console.log(why);
+            }
+        },
+
         getTimeOfSelectedTimer() {
             return this.groups[this.selectedGroup].cronograma[0].timers[
                 this.selectedTimer

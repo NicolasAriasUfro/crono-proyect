@@ -28,6 +28,7 @@ export default {
   },
   data() {
     return {
+      sessionStore: useSessionStore(),
       groupStore: useGroupStore(),
       audioStore: useAudioStore(),
       tab: "",
@@ -48,6 +49,7 @@ export default {
     },
   },
   mounted() {
+    this.groupStore.fetchGroups(1);
     this.setInitialGroupSelected();
   },
   beforeMount() {
