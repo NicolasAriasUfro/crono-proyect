@@ -40,13 +40,13 @@ const ingresar = () => {
     <v-container
       grid-list-xs
       fluid
-      class="px-16 first-container align-content-center"
+      class="first-container align-content-center"
     >
       <v-row>
         <v-col
           cols="12"
           md="6"
-          class="d-flex flex-column align-end"
+          class="d-none d-md-flex flex-column align-end"
         >
           <img
             :src="clockImage"
@@ -57,7 +57,7 @@ const ingresar = () => {
         <v-col
           cols="12"
           md="6"
-          class="d-flex flex-column align-start justify-center px-16 text-left"
+          class="d-flex flex-column align-start justify-center text-left"
         >
           <h1 class="gradient">
             CronoProyect
@@ -91,6 +91,8 @@ const ingresar = () => {
     >
       <v-row class="mb-10">
         <v-col
+          order="1"
+          order-md="1"
           cols="12"
           md="6"
           class="d-flex align-center text-left"
@@ -104,6 +106,8 @@ const ingresar = () => {
           </div>
         </v-col>
         <v-col
+          order="2"
+          order-md="2"
           cols="12"
           md="6"
         >
@@ -118,6 +122,8 @@ const ingresar = () => {
       </v-row>
       <v-row class="mb-10">
         <v-col
+          order="2"
+          order-md="1"
           cols="12"
           md="6"
         >
@@ -130,6 +136,8 @@ const ingresar = () => {
           />
         </v-col>
         <v-col
+          order="1"
+          order-md="2"
           cols="12"
           md="6"
           class="d-flex align-center text-left"
@@ -145,6 +153,8 @@ const ingresar = () => {
       </v-row>
       <v-row class="mb-10">
         <v-col
+          order="1"
+          order-sm="1"
           cols="12"
           md="6"
           class="d-flex align-center text-left"
@@ -159,6 +169,8 @@ const ingresar = () => {
           </div>
         </v-col>
         <v-col
+          order="2"
+          order-md="2"
           cols="12"
           md="6"
           class="d-flex"
@@ -181,6 +193,8 @@ const ingresar = () => {
       </v-row>
       <v-row class="mb-10">
         <v-col
+          order="2"
+          order-md="1"
           cols="12"
           md="6"
         >
@@ -193,6 +207,8 @@ const ingresar = () => {
           />
         </v-col>
         <v-col
+          order="1"
+          order-md="2"
           cols="12"
           md="6"
           class="d-flex align-center text-left"
@@ -230,6 +246,7 @@ const ingresar = () => {
 .first-container {
   background-color: v-bind("theme.current.value.colors.primary_light_3") !important;
   height: 50%;
+  padding: 16px 350px !important;
 }
 .main-clock {
   height: 400px;
@@ -250,5 +267,10 @@ const ingresar = () => {
       v-bind("theme.current.value.colors.success") 55%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+@media (max-width: 600px) {
+    .first-container {
+        padding: 16px !important;
+    }
 }
 </style>
