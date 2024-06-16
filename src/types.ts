@@ -39,6 +39,7 @@ export interface Timer {
     initialSeconds: number;
     actualSeconds: number;
     behavior: TimerBehavior;
+    selected: boolean;
 }
 export interface Schedule {
     id: number;
@@ -46,4 +47,10 @@ export interface Schedule {
     lastTimerId: number;
     timers: Timer[];
 
+}
+
+export interface UserGroups {
+    id: number;
+    name: string;
+    groups: Timer[]
 }

@@ -9,6 +9,7 @@ import {useSessionStore} from "@/stores/SessionStore";
 import draggable from 'vuedraggable';
 import {ref} from 'vue';
 import {useAudioStore} from "@/stores/AudioStore";
+import { UserGroups } from "@/types";
 
 export default {
   components: { GeneralManager, TimerComponent, GeneralGroupManager, TimerGroupComponent, draggable},
@@ -33,19 +34,20 @@ export default {
       audioStore: useAudioStore(),
       tab: "",
       currentTimerIndex: 0,
-      selectedId: null,
-      groupSelected: null,
+      groupSelected: [] as UserGroups[],
+      currentGroupOnPinia: useGroupStore().currentGroup,
       items: useSessionStore().groups,
       noGroups: true,
       drag: false,
     };
   },
   watch: {
-    selectedId(newSelectedId, _oldSelectedId) {
-      const currentGroup = useGroupStore().groups[newSelectedId.id];
-      this.groupSelected = currentGroup;
-      this.groupStore.resetAllTimers();
-      this.groupStore.paused = true;
+    groupSelected: {
+      handler(_newSelected, _oldSelected) {
+        this.groupStore.resetAllTimers();
+        this.groupStore.paused = true;
+      },
+      deep: true
     },
   },
   mounted() {
@@ -69,8 +71,7 @@ export default {
     setInitialGroupSelected() {
       this.noGroups = useSessionStore().groups.length === 0;
       if (!this.noGroups) {
-        this.selectedId = useGroupStore().groups[useSessionStore().groups[0].id];
-        this.groupSelected = useGroupStore().groups[useSessionStore().groups[0].id];
+        this.groupSelected = [this.sessionStore.groups[0]];
       }
     },
   },
@@ -128,9 +129,9 @@ export default {
         class="crono"
       >
         <div>
-          <GeneralGroupManager :group-id="groupSelected.index" />
+          <GeneralGroupManager :group-id="groupSelected[0].id" />
           <v-select
-            v-model="selectedId"
+            v-model="groupSelected[0]"
             :items="items"
             item-title="name"
             item-value="id"
@@ -146,22 +147,21 @@ export default {
           />
         </div>
         <div
-          v-if="groupSelected"
           class="d-flex"
         >
           <div
-            v-for="cronograma in groupSelected.cronograma"
-            :key="cronograma.id"
+            v-for="groups in groupSelected"
+            :key="groups.id"
             class=" d-flex flex-column align-items-center justify-center"
           >
             <div
-              v-for="timer in cronograma.timers"
+              v-for="timer in groups.groups"
               :key="timer.id"
               fluid
               class="ma-3 justify-center timer-container elevation-3"
             >
               <TimerGroupComponent
-                :id-group="groupSelected.index"
+                :id-group="groupSelected[0].id"
                 :id-timer="timer.id"
               />
             </div>

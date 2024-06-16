@@ -120,4 +120,4 @@ button {
 .icon {
   color: var(--primary) !important;
 }
-</style>
+</style>(await this.audio)(await this.audio)(await this.audio)(await this.audio)(await this.audio)(await this.audio)

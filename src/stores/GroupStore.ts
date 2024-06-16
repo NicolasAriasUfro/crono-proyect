@@ -1,4 +1,5 @@
 import { API_ROUTE } from "@/main";
+import { UserGroups } from "@/types";
 import axios from "axios";
 import {defineStore} from "pinia";
 
@@ -116,10 +117,10 @@ export const useGroupStore = defineStore("group", {
                 ],
             },
         ],
-        groupsArray: [],
+        currentGroup: [] as UserGroups[],
         paused: true,
         selectedSchedule: 0,
-        selectedTimer: 0,
+        selectedTimer: 1,
         lastScheduleId: 0,
         selectedGroup: 0,
     }),
@@ -127,7 +128,7 @@ export const useGroupStore = defineStore("group", {
         async fetchGroups(userId: number) {
             try {
                 const groups = await axios.get(`${API_ROUTE}/api/groups/user/${userId}`)
-                console.log(groups.data);
+                //this.groups = groups.data;
             } catch (why) {
                 console.log(why);
             }
@@ -140,10 +141,8 @@ export const useGroupStore = defineStore("group", {
         },
         everySecond() {
             const currentTimer =
-                this.groups[this.selectedGroup].cronograma[0].timers[
-                    this.selectedTimer
-                ];
-            if (!this.paused) {
+                this.currentGroup[0].groups.find((u) => u.id === this.selectedTimer);
+            if (!this.paused && currentTimer) {
                 if (currentTimer.actualSeconds <= 0) {
                     currentTimer.actualSeconds = currentTimer.initialSeconds;
                     currentTimer.selected = false;
@@ -156,10 +155,7 @@ export const useGroupStore = defineStore("group", {
         },
         selectNextTimer() {
             //revisar si ya terminó
-            if (
-                this.selectedTimer >=
-                this.groups[this.selectedGroup].cronograma[0].timers.length - 1
-            ) {
+            if (this.selectedTimer >= this.currentGroup[0].groups.length) {
                 this.paused = true;
                 console.log("terminó");
                 this.selectedTimer = 0;
@@ -167,90 +163,90 @@ export const useGroupStore = defineStore("group", {
                 this.selectedTimer++;
             }
         },
-        addTimer(nameTimer, initialSeconds) {
-            this.schedules[this.selectedSchedule].lastTimerId++;
-            //create the timer
-            const newTimer = {
-                id: this.schedules[this.selectedSchedule].lastTimerId,
-                name: nameTimer,
-                initialSeconds,
-                actualSeconds: initialSeconds,
-            };
-            //add the timer
-            this.schedules[this.selectedSchedule].timers.push(newTimer);
-            return newTimer;
-        },
-        removeTimer(idSchedule, idTimer) {
-            const schedule = this.schedules.find((s) => s.id === idSchedule);
-            if (schedule) {
-                const index = schedule.timers.findIndex(
-                    (timer) => timer.id === idTimer
-                );
-                if (index !== -1) {
-                    schedule.timers.splice(index, 1);
-                }
-            }
-        },
-        removeTimerFromActiveSchedule(idTimer) {
-            // Remove the timer from the default schedule
-            console.log(idTimer);
-            const schedule = this.schedules[this.selectedSchedule];
-            const index = schedule.timers.findIndex(
-                (timer) => timer.id === idTimer
-            );
-            if (index !== -1) {
-                this.schedules[this.selectedSchedule].timers.splice(index, 1);
-            }
-        },
-        decreaseTimer(idTimer, seconds) {
-            const selectedSchedule =
-                useGroupStore().schedules[this.selectedSchedule];
-            const timerIndex = selectedSchedule.timers.findIndex(
-                (t) => t.id === idTimer
-            );
+        // addTimer(nameTimer, initialSeconds) {
+        //     this.schedules[this.selectedSchedule].lastTimerId++;
+        //     //create the timer
+        //     const newTimer = {
+        //         id: this.schedules[this.selectedSchedule].lastTimerId,
+        //         name: nameTimer,
+        //         initialSeconds,
+        //         actualSeconds: initialSeconds,
+        //     };
+        //     //add the timer
+        //     this.schedules[this.selectedSchedule].timers.push(newTimer);
+        //     return newTimer;
+        // },
+        // removeTimer(idSchedule, idTimer) {
+        //     const schedule = this.schedules.find((s) => s.id === idSchedule);
+        //     if (schedule) {
+        //         const index = schedule.timers.findIndex(
+        //             (timer) => timer.id === idTimer
+        //         );
+        //         if (index !== -1) {
+        //             schedule.timers.splice(index, 1);
+        //         }
+        //     }
+        // },
+        // removeTimerFromActiveSchedule(idTimer) {
+        //     // Remove the timer from the default schedule
+        //     console.log(idTimer);
+        //     const schedule = this.schedules[this.selectedSchedule];
+        //     const index = schedule.timers.findIndex(
+        //         (timer) => timer.id === idTimer
+        //     );
+        //     if (index !== -1) {
+        //         this.schedules[this.selectedSchedule].timers.splice(index, 1);
+        //     }
+        // },
+        // decreaseTimer(idTimer, seconds) {
+        //     const selectedSchedule =
+        //         useGroupStore().schedules[this.selectedSchedule];
+        //     const timerIndex = selectedSchedule.timers.findIndex(
+        //         (t) => t.id === idTimer
+        //     );
 
-            if (timerIndex !== -1) {
-                selectedSchedule.timers[timerIndex].actualSeconds -= seconds;
-                // Puedes agregar lógica adicional aquí, como manejar el caso en que actualSeconds sea menor que 0.
-            }
-        },
+        //     if (timerIndex !== -1) {
+        //         selectedSchedule.timers[timerIndex].actualSeconds -= seconds;
+        //         // Puedes agregar lógica adicional aquí, como manejar el caso en que actualSeconds sea menor que 0.
+        //     }
+        // },
         resetSchedule() {
-            this.selectedTimer = 0;
+            this.selectedTimer = 1;
             this.resetAllTimers();
         },
-        resetTimer(idTimer) {
-            const selectedSchedule =
-                this.groups[this.selectedGroup].cronograma[0].timers[
-                    this.selectedSchedule
-                ];
-            const timerIndex = selectedSchedule.timers.findIndex(
-                (t) => t.id === idTimer
-            );
-            if (timerIndex !== -1) {
-                selectedSchedule.timers[timerIndex].actualSeconds =
-                    selectedSchedule.timers[timerIndex].initialSeconds;
-            }
-        },
+        // resetTimer(idTimer) {
+        //     const selectedSchedule =
+        //         this.groups[this.selectedGroup].cronograma[0].timers[
+        //             this.selectedSchedule
+        //         ];
+        //     const timerIndex = selectedSchedule.timers.findIndex(
+        //         (t) => t.id === idTimer
+        //     );
+        //     if (timerIndex !== -1) {
+        //         selectedSchedule.timers[timerIndex].actualSeconds =
+        //             selectedSchedule.timers[timerIndex].initialSeconds;
+        //     }
+        // },
         resetAllTimers() {
             //resetear todos los timer, igualar actualseconds a initialSecondos
             const currentTimers =
-                this.groups[this.selectedGroup].cronograma[0].timers;
+                this.currentGroup[0].groups;
             for (let i = 0; i < currentTimers.length; i++) {
                 currentTimers[i].actualSeconds =
                     currentTimers[i].initialSeconds;
                 currentTimers[i].selected = false;
             }
-            this.selectedTimer = 0;
+            this.selectedTimer = 1;
         },
-        changeTimerName(idTimer, newName) {
-            const selectedSchedule = this.schedules[this.selectedSchedule];
-            const timerIndex = selectedSchedule.timers.findIndex(
-                (t) => t.id === idTimer
-            );
-            if (timerIndex !== -1) {
-                selectedSchedule.timers[timerIndex].name = newName;
-            }
-        },
+        // changeTimerName(idTimer, newName) {
+        //     const selectedSchedule = this.schedules[this.selectedSchedule];
+        //     const timerIndex = selectedSchedule.timers.findIndex(
+        //         (t) => t.id === idTimer
+        //     );
+        //     if (timerIndex !== -1) {
+        //         selectedSchedule.timers[timerIndex].name = newName;
+        //     }
+        // },
     },
     persist: true,
 });

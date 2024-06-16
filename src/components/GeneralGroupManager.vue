@@ -46,6 +46,7 @@ export default {
       this.playAudio();
     },
     generalReset() {
+
       this.generalPause();
       this.audioStore.playing = false;
       useGroupStore().resetAllTimers();
