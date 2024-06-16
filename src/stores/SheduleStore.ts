@@ -1,6 +1,6 @@
 import {useSerialPortStore} from "./SerialPortStore.ts";
 import {defineStore} from "pinia";
-import {Schedule, TimerAccion} from "@/types.ts";
+import {Schedule, Timer, TimerBehavior} from "@/types.ts";
 
 interface ScheduleStore {
     selectedSchedule: number;
@@ -21,7 +21,7 @@ export const useScheduleStore = defineStore("schedule", {
         name: "Cronograma",
         lastTimerId: 0,
         timers: [
-          { id: 0, name: "bienvenida", initialSeconds: 5, actualSeconds: 5 , status: TimerAccion.NORMAL},
+          { id: 0, name: "bienvenida", initialSeconds: 5, actualSeconds: 5 , behavior: TimerBehavior.NORMAL},
         ],
       },
     ],
@@ -95,15 +95,15 @@ export const useScheduleStore = defineStore("schedule", {
     addTimer(nameTimer:string, initialSeconds:number) {
       this.schedules[this.selectedSchedule].lastTimerId++;
       //create the timer
-      const newTimer = {
+      const newTimer:Timer = {
         id: this.schedules[this.selectedSchedule].lastTimerId,
         name: nameTimer,
         initialSeconds,
         actualSeconds: initialSeconds,
+        behavior: TimerBehavior.NORMAL
       };
       //add the timer
       this.schedules[this.selectedSchedule].timers.push(newTimer);
-      return newTimer;
     },
     removeTimer(idSchedule: number, idTimer: number) {
       const schedule = this.schedules.find((s) => s.id === idSchedule);

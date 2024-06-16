@@ -1,8 +1,37 @@
 <script lang=ts>
 import {useScheduleStore} from "@/stores/SheduleStore";
 import {useTheme} from "vuetify";
-import {TimerAccion} from "@/types.ts";
+import {TimerBehavior} from "@/types.ts";
 import {$enum} from "ts-enum-util";
+
+interface OptionTimer {
+  behavior:TimerBehavior,
+  title:string,
+  subtitle:string
+}
+
+const options: OptionTimer[] = [
+  {
+    behavior: TimerBehavior.NORMAL,
+    title:"Normal",
+    subtitle:"Al terminar el tiempo asignado, continúa con  el siguiente"
+  },
+  {
+    behavior: TimerBehavior.OPTIONAL,
+    title: "Opcional",
+    subtitle:"Se activa solo si hay tiempo suficiente."
+  },
+  {
+    behavior: TimerBehavior.SKIP,
+    title: "Omitir",
+    subtitle:"Pasa inmediatamente al siguiente."
+  },
+  {
+    behavior: TimerBehavior.IMPORTANT,
+    title: "Importante",
+    subtitle:"Necesita pasar al siguiente manualmente."
+  }
+]
 
 export default {
   props: {
@@ -17,8 +46,11 @@ export default {
   },
   data() {
     return {
+      options: options,
+      selected: "",
       theme: useTheme(),
-      timerOptions: $enum(TimerAccion).getValues(),
+      timerSubtitle: $enum(TimerBehavior).keys(),
+      timerTitle: $enum(TimerBehavior).getKeys(),
       timerInterval: null,
       esPrioritaria: false,
       isDeleted: false,
@@ -26,6 +58,11 @@ export default {
     };
   },
   computed: {
+    behaviorOptions(): any {
+      return options.map(option => ({
+        title: option.title,
+        subtitle: option.subtitle
+      }))},
     formattedActualTime() {
       const isNegativeTime = this.actualSeconds < 0;
       let seconds = this.actualSeconds;
@@ -83,6 +120,9 @@ export default {
   },
   mounted() {},
   methods: {
+    options() {
+      return options
+    },
     deleteTimer() {
       useScheduleStore().removeTimerFromActiveSchedule(this.idTimer);
     },
@@ -113,7 +153,8 @@ export default {
         </div>
       </v-col>
       <v-col>
-        <v-select :items="timerOptions" />
+        selected = {{selected.title}}
+        <v-select v-model="selected" :item-props="true" :items="options" item-title="title" return-object/>
       </v-col>
       <v-col>
         <v-btn

@@ -1,15 +1,44 @@
-export enum TimerAccion {
-    NORMAL="Normal",
-    SKIP = "Omitir",
-    IMPORTANT="Priorizar",
-    OPTIONAL = "Opcional"
+export enum TimerBehavior {
+    NORMAL,
+    OPTIONAL,
+    SKIP,
+    IMPORTANT
 }
+export interface OptionTimer {
+    behavior:TimerBehavior,
+    title:string,
+    subtitle:string
+}
+
+export const options: OptionTimer[] = [
+    {
+        behavior: TimerBehavior.NORMAL,
+        title:"normal",
+        subtitle:"Al terminar el tiempo asignado, continúa con  el siguiente"
+    },
+    {
+        behavior: TimerBehavior.OPTIONAL,
+        title: "Opcional",
+        subtitle:"Se activa solo si hay tiempo suficiente."
+    },
+    {
+        behavior: TimerBehavior.SKIP,
+        title: "Omitir",
+        subtitle:"Pasa inmediatamente al siguiente."
+    },
+    {
+        behavior: TimerBehavior.IMPORTANT,
+        title: "Importante",
+        subtitle:"Necesita pasar al siguiente manualmente."
+    }
+]
+
 export interface Timer {
     id: number;
     name: string;
     initialSeconds: number;
     actualSeconds: number;
-    status: TimerAccion;
+    behavior: TimerBehavior;
 }
 export interface Schedule {
     id: number;
