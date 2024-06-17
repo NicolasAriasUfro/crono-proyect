@@ -90,7 +90,7 @@ export default {
         },
     },
     beforeMount() {
-      this.selectedSchedule = useGroupStore().currentGroup[0].groups;
+      this.selectedSchedule = useGroupStore().currentGroup[0].timers;
     }
 };
 </script>

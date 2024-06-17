@@ -1,4 +1,5 @@
 <script lang=ts>
+import { Group } from '@/types';
 import {useGroupStore} from '../stores/GroupStore';
 import {useSessionStore} from '../stores/SessionStore';
 
@@ -6,7 +7,7 @@ export default {
     data() {
         return {
             value: 20,
-            groupSelected: '',
+            groupSelected: [] as Group[],
             items: useGroupStore().groups,
             alreadySelected: false,
             msg: '¡Ya te has unido a este grupo!'
@@ -21,24 +22,23 @@ export default {
     },
     methods: {
         unirse() {
-            useSessionStore().groups.push({
-                id: this.groupSelected.index,
-                name: this.groupSelected.name
-            });
+            useSessionStore().addGroup(this.groupSelected[0]);
             this.alreadySelected = true;
             this.msg = 'Te has unido al grupo exitosamente.'
         }
     },
+    beforeMount(){
+      useGroupStore().fetchAllGroups();
+    }
 };
 </script>
 
 <template>
   <v-container grid-list-xs>
     <v-select
-      v-model="groupSelected"
+      v-model="groupSelected[0]"
       :items="items"
       item-title="name"
-      item-value="cronograma"
       hint="Grupo seleccionado"
       label="Selecciona un grupo"
       density="compact"
@@ -50,7 +50,7 @@ export default {
       single-line
     />
   </v-container>
-  <div v-if="groupSelected !== ''">
+  <div v-if="groupSelected.length > 0">
     <v-btn
       v-if="!alreadySelected"
       color="success"

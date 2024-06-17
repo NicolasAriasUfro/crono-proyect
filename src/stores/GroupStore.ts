@@ -1,161 +1,57 @@
 import { API_ROUTE } from "@/main";
-import { UserGroups } from "@/types";
+import { Group, Timer, UserGroup } from "@/types";
 import axios from "axios";
 import {defineStore} from "pinia";
 
 export const useGroupStore = defineStore("group", {
     state: () => ({
-        groups: [
-            {
-                index: 0,
-                name: "ESP1",
-                cronograma: [
-                    {
-                        id: 1,
-                        name: "Cronograma",
-                        lastTimerId: 0,
-                        timers: [
-                            {
-                                id: 1,
-                                name: "Inicio",
-                                initialSeconds: "005",
-                                actualSeconds: "005",
-                                selected: false,
-                            },
-                            {
-                                id: 2,
-                                name: "Introducción",
-                                initialSeconds: "010",
-                                actualSeconds: "010",
-                                selected: false,
-                            },
-                            {
-                                id: 3,
-                                name: "Objetivo",
-                                initialSeconds: "180",
-                                actualSeconds: "180",
-                                selected: false,
-                            },
-                            {
-                                id: 4,
-                                name: "Motivación",
-                                initialSeconds: "180",
-                                actualSeconds: "180",
-                                selected: false,
-                            },
-                            {
-                                id: 5,
-                                name: "Desarrollo",
-                                initialSeconds: "60",
-                                actualSeconds: "60",
-                                selected: false,
-                            },
-                            {
-                                id: 6,
-                                name: "Tema 1",
-                                initialSeconds: "300",
-                                actualSeconds: "300",
-                                selected: false,
-                            },
-                            {
-                                id: 7,
-                                name: "Tema 2",
-                                initialSeconds: "300",
-                                actualSeconds: "300",
-                                selected: false,
-                            },
-                            {
-                                id: 8,
-                                name: "Interludio",
-                                initialSeconds: "120",
-                                actualSeconds: "120",
-                                selected: false,
-                            },
-                            {
-                                id: 10,
-                                name: "Tema 3",
-                                initialSeconds: "300",
-                                actualSeconds: "300",
-                                selected: false,
-                            },
-                            {
-                                id: 11,
-                                name: "Conclusión",
-                                initialSeconds: "300",
-                                actualSeconds: "300",
-                                selected: false,
-                            },
-                            {
-                                id: 12,
-                                name: "Preguntas",
-                                initialSeconds: "300",
-                                actualSeconds: "300",
-                                selected: false,
-                            },
-                        ],
-                    },
-                ],
-            },
-            {
-                index: 1,
-                name: "ISOFT ENTREGA FINAL",
-                cronograma: [
-                    {
-                        id: 2,
-                        name: "Cronograma",
-                        lastTimerId: 0,
-                        timers: [
-                            {
-                                id: 1,
-                                name: "Inicio",
-                                initialSeconds: "005",
-                                actualSeconds: "005",
-                                selected: false,
-                            },
-                        ],
-                    },
-                ],
-            },
-        ],
-        currentGroup: [] as UserGroups[],
+        groups: [] as Group[],
+        currentGroup: [] as UserGroup[],
         paused: true,
         selectedSchedule: 0,
-        selectedTimer: 1,
+        selectedTimer: 0,
         lastScheduleId: 0,
         selectedGroup: 0,
     }),
     actions: {
-        async fetchGroups(userId: number) {
+        async fetchAllGroups() {
             try {
-                const groups = await axios.get(`${API_ROUTE}/api/groups/user/${userId}`)
-                //this.groups = groups.data;
+                const groupsFetch = await axios.get(`${API_ROUTE}/api/groups`)
+                const groups: Group[] = groupsFetch.data.map((group: { timer_group_id: any; name: any; }) => {
+                    return {
+                        id: group.timer_group_id,
+                        name: group.name,
+                    } as UserGroup;
+                });
+                this.groups = groups;
             } catch (why) {
                 console.log(why);
             }
         },
-
-        getTimeOfSelectedTimer() {
-            return this.groups[this.selectedGroup].cronograma[0].timers[
-                this.selectedTimer
-            ].actualSeconds;
-        },
+        // getTimeOfSelectedTimer() {
+        //     return this.groups[this.selectedGroup].cronograma[0].timers[
+        //         this.selectedTimer
+        //     ].actualSeconds;
+        // },
         everySecond() {
-            const currentTimer =
-                this.currentGroup[0].groups.find((u) => u.id === this.selectedTimer);
-            if (!this.paused && currentTimer) {
-                if (currentTimer.actualSeconds <= 0) {
-                    currentTimer.actualSeconds = currentTimer.initialSeconds;
-                    currentTimer.selected = false;
-                    this.selectNextTimer();
-                } else {
-                    currentTimer.actualSeconds--;
-                    currentTimer.selected = true;
+            if (this.currentGroup.length > 0) {
+                const currentTimer =
+                    this.currentGroup[0].timers[this.selectedTimer];
+                if (!this.paused && currentTimer) {
+                    if (currentTimer.actualSeconds <= 0) {
+                        currentTimer.actualSeconds = currentTimer.initialSeconds;
+                        currentTimer.selected = false;
+                        this.selectNextTimer();
+                    } else {
+                        currentTimer.actualSeconds--;
+                        currentTimer.selected = true;
+                    }
                 }
             }
         },
         selectNextTimer() {
             //revisar si ya terminó
-            if (this.selectedTimer >= this.currentGroup[0].groups.length) {
+            if (this.selectedTimer >= this.currentGroup[0].timers.length) {
                 this.paused = true;
                 console.log("terminó");
                 this.selectedTimer = 0;
@@ -211,7 +107,7 @@ export const useGroupStore = defineStore("group", {
         //     }
         // },
         resetSchedule() {
-            this.selectedTimer = 1;
+            this.selectedTimer = 0;
             this.resetAllTimers();
         },
         // resetTimer(idTimer) {
@@ -229,14 +125,17 @@ export const useGroupStore = defineStore("group", {
         // },
         resetAllTimers() {
             //resetear todos los timer, igualar actualseconds a initialSecondos
-            const currentTimers =
-                this.currentGroup[0].groups;
-            for (let i = 0; i < currentTimers.length; i++) {
-                currentTimers[i].actualSeconds =
-                    currentTimers[i].initialSeconds;
-                currentTimers[i].selected = false;
+            if (this.currentGroup.length > 0) {
+                const currentTimers = this.currentGroup[0].timers;
+                if (currentTimers) {
+                    for (let i = 0; i < currentTimers.length; i++) {
+                        currentTimers[i].actualSeconds =
+                            currentTimers[i].initialSeconds;
+                        currentTimers[i].selected = false;
+                    }
+                    this.selectedTimer = 0;
+                } 
             }
-            this.selectedTimer = 1;
         },
         // changeTimerName(idTimer, newName) {
         //     const selectedSchedule = this.schedules[this.selectedSchedule];

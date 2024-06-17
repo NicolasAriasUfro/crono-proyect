@@ -49,8 +49,13 @@ export interface Schedule {
 
 }
 
-export interface UserGroups {
+export interface UserGroup {
     id: number;
     name: string;
-    groups: Timer[]
+    timers: Timer[]
+}
+
+export interface Group {
+    id: number;
+    name: string;
 }
