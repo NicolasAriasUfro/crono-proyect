@@ -21,7 +21,7 @@ export const useScheduleStore = defineStore("schedule", {
         name: "Cronograma",
         lastTimerId: 0,
         timers: [
-          { id: 0, name: "bienvenida", initialSeconds: 5, actualSeconds: 5 , behavior: TimerBehavior.NORMAL},
+          { id: 0, name: "bienvenida", initialSeconds: 5, actualSeconds: 5 , behavior: TimerBehavior.NORMAL, selected:false},
         ],
       },
     ],
@@ -99,7 +99,8 @@ export const useScheduleStore = defineStore("schedule", {
         name: nameTimer,
         initialSeconds,
         actualSeconds: initialSeconds,
-        behavior: TimerBehavior.NORMAL
+        behavior: TimerBehavior.NORMAL,
+        selected: false,
       };
       //add the timer
       this.schedules[this.selectedSchedule].timers.push(newTimer);
