@@ -1,8 +1,8 @@
 <script lang=ts>
-import {useScheduleStore} from "@/stores/SheduleStore";
-import {useGroupStore} from "@/stores/GroupStore";
-import {useTheme} from "vuetify/lib/framework.mjs";
-import {reactive} from 'vue';
+import { useScheduleStore } from "@/stores/SheduleStore";
+import { useSessionStore } from "@/stores/SessionStore";
+import { Timer } from "@/types";
+import { useGroupStore } from "@/stores/GroupStore";
 
 export default {
     props: {
@@ -11,8 +11,8 @@ export default {
             default: null,
         },
         idTimer: {
-        type: Number,
-        default: null,
+          type: Number,
+          default: null,
         },
         isEditable: {
         type: Boolean,
@@ -21,18 +21,16 @@ export default {
     },
     data() {
         return {
-            theme: useTheme(),
             timerOptions: ["priorizada", "normal", "baja"],
             timerInterval: null,
             esPrioritaria: false,
             isDeleted: false,
             isActive: false,
-            selectedSchedule: reactive(useGroupStore().groups[this.idGroup].cronograma[0].timers),
+            selectedSchedule: [] as Timer[] | undefined,
         };
     },
     computed: {
         formattedActualTime() {
-
             const isNegativeTime = this.actualSeconds < 0;
             let seconds = this.actualSeconds;
             if (isNegativeTime) {
@@ -66,22 +64,22 @@ export default {
             return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
         },
         name() {
-            const timer = this.selectedSchedule.find((t) => t.id === this.idTimer);
+            const timer = this.selectedSchedule?.find((t) => t.id === this.idTimer);
             return timer ? timer.name : 0;
         },
         actualSeconds() {
-            const timer = this.selectedSchedule.find((t) => t.id === this.idTimer);
+            const timer = this.selectedSchedule?.find((t) => t.id === this.idTimer);
             return timer ? timer.actualSeconds : 0;
         },
         initialSeconds() {
-            const timer = this.selectedSchedule.find((t) => t.id === this.idTimer);
+            const timer = this.selectedSchedule?.find((t) => t.id === this.idTimer);
             return timer ? timer.initialSeconds : 0;
         },
         selectedTimer() {
-            return this.selectedSchedule.find((t) => t.id === this.idTimer).selected;
+            return this.selectedSchedule?.find((t) => t.id === this.idTimer)?.selected;
         },
         progress() {
-            const timer = this.selectedSchedule.find((t) => t.id === this.idTimer);
+            const timer = this.selectedSchedule?.find((t) => t.id === this.idTimer);
             if (!timer || timer.initialSeconds === 0) return 0;
             return (timer.actualSeconds / timer.initialSeconds) * 100;
         },
@@ -91,6 +89,9 @@ export default {
             useScheduleStore().removeTimerFromActiveSchedule(this.idTimer);
         },
     },
+    beforeMount() {
+      this.selectedSchedule = useGroupStore().currentGroup[0].timers;
+    }
 };
 </script>
 

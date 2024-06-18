@@ -15,6 +15,8 @@ import {library} from "@fortawesome/fontawesome-svg-core";
 
 /* import font awesome icon component */
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
+import '@mdi/font/css/materialdesignicons.css'
+import { aliases, mdi } from 'vuetify/iconsets/mdi'
 
 /* import specific icons */
 import {
@@ -28,6 +30,8 @@ import {
     faTrash,
     faVolumeHigh,
     faVolumeXmark,
+    faCircleArrowRight,
+    faCircleArrowLeft,
 } from "@fortawesome/free-solid-svg-icons";
 
 import {faGithub, faGoogle} from "@fortawesome/free-brands-svg-icons";
@@ -49,6 +53,13 @@ const vuetify = createVuetify({
             mentaTheme,
         },
     },
+    icons: {
+        defaultSet: 'mdi',
+        aliases,
+        sets: {
+            mdi
+        }
+    }
 });
 
 const pinia = createPinia();
@@ -56,7 +67,7 @@ pinia.use(piniaPluginPersistedState);
 
 /* Firebase */
 const firebaseConfig = {
-    apiKey: process.env.VUE_APP_FIREBASE_KEY,
+    apiKey: import.meta.env.VITE_FIREBASE_KEY,
     authDomain: "cronocoso.firebaseapp.com",
     projectId: "cronocoso",
     storageBucket: "cronocoso.appspot.com",
@@ -79,7 +90,11 @@ library.add(faCircleCheck);
 library.add(faVolumeHigh);
 library.add(faVolumeXmark);
 library.add(faGithub);
+library.add(faCircleArrowLeft);
+library.add(faCircleArrowRight);
 
+export const API_ROUTE = 'http://localhost:8000';
+//export const API_ROUTE = 'https://crono-proyect.shuttleapp.rs';
 
 createApp(App)
     .component("font-awesome-icon", FontAwesomeIcon)

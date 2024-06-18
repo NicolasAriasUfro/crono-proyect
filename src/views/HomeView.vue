@@ -2,7 +2,7 @@
 import {useSessionStore} from "../stores/SessionStore";
 import navBar from "../../../crono-proyect/src/components/NavBar.vue";
 import footerComponent from "../../../crono-proyect/src/components/Footer.vue";
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 import router from '@/router';
 
 const sessionStore = useSessionStore();
@@ -12,6 +12,10 @@ const login = ref(sessionStore.token != null);
 const logIn = () => {
   router.push({ name: "auth" });
 }
+
+onMounted(() => {
+  sessionStore.fetchGroups(1); //TODO! FIX THIS
+})
 </script>
 
 <template>
@@ -28,6 +32,7 @@ const logIn = () => {
         color="blue-grey-lighten-5"
         align-tabs="center"
         class="bg-blue-grey tabs"
+        fixed-tabs
         show-arrows
         center-active
       >
