@@ -32,6 +32,7 @@ onMounted(() => {
         color="blue-grey-lighten-5"
         align-tabs="center"
         class="bg-blue-grey tabs"
+        fixed-tabs
         show-arrows
         center-active
       >
