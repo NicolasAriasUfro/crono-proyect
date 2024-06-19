@@ -1,13 +1,14 @@
-<script>
-import AuthService from '../services/AuthService.js'
+<script lang="ts">
 import GoogleLogin from '../../../crono-proyect/src/components/GoogleLogin.vue'
 import { useSessionStore } from '@/stores/SessionStore';
 import router from '@/router';
+import { LoginForm } from '@/types';
 
 export default {
   components: { GoogleLogin },
   data: () => ({
     message: '',
+    messageRegister: '',
     store: useSessionStore(),
     tab: 0,
     tabs: [
@@ -16,28 +17,77 @@ export default {
     ],
     dialog: true,
     valid: true,
-    authService: new AuthService(),
+    userName: '',
+    userNameRegister: '',
+    userNameRules: [
+      (value: string) => {
+        if (value) return true
+        return 'Por favor ingresar nombre de usuario.'
+      },
+      (value: string) => {
+        if (value.length >= 4 && value.length <= 15) return true
+        return 'El nombre de usuario debe tener entre 4 y 15 caracteres.' 
+      }
+    ],
     email: '',
+    emailRegister: '',
     emailRules: [
-      value => {
+      (value: string) => {
         if (value) return true
         return 'Por favor ingresar correo.'
       },
-      value => {
+      (value: string) => {
         if (/.+@.+\..+/.test(value)) return true
         return 'El correo debe ser valido.'
       }
     ],
     password: '',
+    passwordRegister: '',
     passwordRules: [
-      value => {
+      (value: string) => {
         if ( value ) return true
         return 'Por favor ingresar Contraseña.'
       },
-      v => (v.length >= 6) || "Min 6 caracteres!"
-    ]
+      (v: string) => (v.length >= 6) || "¡Mínimo 6 caracteres!",
+      (v: string) => (v.length <= 15) || "¡Máximo 15 caracteres!"
+    ],
+    rePassword: '',
+    rePasswordRules: [
+      (value: string) => {
+        if (value) return true;
+        return 'Por favor repetir Contraseña.';
+      },
+      (v: string) => (v.length >= 6) || "¡Mínimo 6 caracteres!",
+      (v: string) => (v.length <= 15) || "¡Máximo 15 caracteres!",
+    ],
   }),
+  watch: {
+    passwordRegister() {
+      console.log("pass")
+      this.validateRePassword();
+    }
+  },
+  computed: {
+    passwordMatch() {
+      return (_value: string) => this.passwordRegister === this.rePassword || '¡Las contraseñas no coinciden!'
+    }
+  },
   methods: {
+    async register() {
+      try {
+        const loginForm: LoginForm = {
+          name: this.userNameRegister,
+          email: this.emailRegister,
+          password: this.passwordRegister
+        }
+        await this.store.register(loginForm);
+        this.messageRegister = 'Cuenta creada con éxito'
+        this.reset();
+      } catch (error) {
+        this.messageRegister = 'No se ha podido crear la cuenta ' + (error.response?.data || error.message);
+      }
+      
+    },
     authUser() {
       const currentUser = this.authService.checkUserValido(this.email, this.password);
       if (currentUser != null) {
@@ -46,24 +96,22 @@ export default {
         this.store.groups = currentUser.groups;
         router.push({ path: '/cronograma' })
       } else {
-        this.$refs.loginForm.reset()
+        this.reset();
         this.message = '¡Credenciales incorrectas!';
       }
     },
-    validate() {
-      if (this.$refs.loginForm.validate()) {
-        //TODO: MAGIC HERE (soon*)
-      }
+    validateRePassword() {
+        (this.$refs.rePasswordField as any).validate();
     },
     reset() {
-      this.$refs.form.reset();
+      (this.$refs.loginForm as any).reset();
     },
     resetValidation() {
-      this.$refs.form.resetValidation();
+      (this.$refs.form as any).resetValidation();
     },
     back() {
       router.push({ name: "frontpage" })
-    }
+    },
   },
 }
 </script>
@@ -81,6 +129,7 @@ export default {
     transition="dialog-transition"
   >
     <v-tabs
+      :v-value="tab"
       class="rounded"
       bg-color="primary"
       direction="vertical"
@@ -90,7 +139,7 @@ export default {
         <div class="flex-grow-1">
           <v-tab
             class="d-block mx-0"
-            value="one"
+            :value="0"
             width="300px"
           >
             Login
@@ -99,7 +148,7 @@ export default {
         <div class="flex-grow-1 justify-center">
           <v-tab
             class="d-block mx-0"
-            value="dos"
+            :value="1"
             width="300px"
           >
             Registro
@@ -107,11 +156,12 @@ export default {
         </div>
       </div>
       <v-tabs-window>
-        <v-tabs-window-item value="one">
+        <v-tabs-window-item :value="0">
           <v-card
             rounded="0"
-            class="px-8 py-5"
+            class="px-8 pb-5 d-flex flex-column justify-center"
             color="background"
+            height="550px"
           >
             <v-form
               ref="loginForm"
@@ -180,10 +230,96 @@ export default {
           </v-card>
         </v-tabs-window-item>
         <v-tabs-window-item
-          value="dos"
+          :value="1"
           class="text-center"
         >
-          SOON&#8482;
+        <v-card
+            rounded="0"
+            class="px-8 py-5"
+            color="background"
+            height="550px"
+          >
+            <v-form
+              ref="loginForm"
+              v-model="valid"
+              class="mb-3"
+              validate-on="input"
+            >
+              <v-row>
+                <v-col cols="12">
+                  <v-text-field
+                    v-model="userNameRegister"
+                    bg-color="teal-lighten-5"
+                    color="red-darken-4"
+                    :rules="userNameRules"
+                    label="Nombre usuario"
+                    required
+                  />
+                </v-col>
+                <v-col cols="12">
+                  <v-text-field
+                    v-model="emailRegister"
+                    bg-color="teal-lighten-5"
+                    color="red-darken-4"
+                    :rules="emailRules"
+                    label="Correo"
+                    required
+                  />
+                </v-col>
+                <v-col cols="12">
+                  <v-text-field
+                    v-model="passwordRegister"
+                    bg-color="teal-lighten-5"
+                    :rules="passwordRules"
+                    :type="'password'"
+                    label="Contraseña"
+                    required
+                  />
+                </v-col>
+                <v-col cols="12">
+                  <v-text-field
+                    ref="rePasswordField"
+                    v-model="rePassword"
+                    bg-color="teal-lighten-5"
+                    :rules="[passwordMatch]"
+                    :type="'password'"
+                    label="Repetir Contraseña"
+                    required
+                  />
+                </v-col>
+                <v-col
+                  class="d-flex align-center justify-space-between"
+                  align-self="center"
+                >
+                  <div class="d-flex lex-grow-1 align-start">
+                    <v-btn
+                      align-center
+                      color="pink-lighten-2"
+                      type="button"
+                      :disabled="!valid"
+                      @click="register"
+                    >
+                      Registrar
+                    </v-btn>
+                  </div>
+                  <div class="d-flex flex-grow-1 text-center justify-center">
+                    <p class="d-flex pl-4 text-center align-end">
+                      {{ messageRegister }}
+                    </p>
+                  </div>
+                </v-col>
+              </v-row>
+            </v-form>
+            <hr>
+            <div class="d-flex justify-center mt-5">
+              <v-btn
+                color="success"
+                @click="back"
+              >
+                Volver
+              </v-btn>
+            </div>
+          </v-card>
         </v-tabs-window-item>
       </v-tabs-window>
     </v-tabs>

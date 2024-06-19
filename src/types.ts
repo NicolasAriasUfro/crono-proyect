@@ -59,3 +59,16 @@ export interface Group {
     id: number;
     name: string;
 }
+
+export interface LoginForm {
+    name: string;
+    email: string;
+    password: string;
+}
+
+export interface CurrentUser {
+    id: number;
+    userName: string;
+    token: string
+}
+

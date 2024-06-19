@@ -1,5 +1,5 @@
 import { API_ROUTE } from "@/main";
-import { Group, Timer, TimerBehavior, UserGroup } from "@/types";
+import { CurrentUser, Group, LoginForm, Timer, TimerBehavior, UserGroup } from "@/types";
 import axios from "axios";
 import {defineStore} from "pinia";
 
@@ -64,9 +64,22 @@ export const useSessionStore = defineStore('session', {
                     }))
                 };
                 this.groups.push(userGroup);
-                console.log(this.groups);
             } catch (error) {
                 console.log(error);
+            }
+        },
+        async register(currentUser: LoginForm) {
+            try {
+                const url = `${API_ROUTE}/api/user/register`;
+                const response = await axios.post(url, currentUser, {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+            } catch (error) {
+                console.log(error);
+                // this is intended, trust me bro
+                throw error;
             }
         }
     },
