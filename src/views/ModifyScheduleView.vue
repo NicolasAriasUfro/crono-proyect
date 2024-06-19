@@ -1,5 +1,6 @@
 <script lang=ts>
 import {useScheduleStore} from "@/stores/SheduleStore";
+import {Schedule} from "@/types.ts";
 
 export default {
   name: "ModifyScheduleView",
@@ -7,25 +8,21 @@ export default {
     return {
       nameSchedule: "",
       tab: null,
-      listaDeSchedules: useScheduleStore().schedules
+      scheduleStore : useScheduleStore(),
+      scheduleSelected: useScheduleStore().schedules[useScheduleStore().selectedScheduleIndex] as Schedule,
     };
   },
   computed: {
-    schedulesList() {
-      //get name of every schedule
-      const schedules = [];
-      useScheduleStore().schedules.forEach((schedule) => {
-        schedules.push({ id: schedule.id, name: schedule.name });
-      });
-      return schedules;
+    listaDeSchedules(){
+      return useScheduleStore().schedules as Schedule[];
     },
     selectedSchedule: {
       get() {
-        return useScheduleStore().selectedSchedule;
+        return useScheduleStore().selectedScheduleIndex;
       },
-      set(value) {
+      set(value:Schedule) {
         console.log(value);
-        useScheduleStore().selectedSchedule = value.id;
+        useScheduleStore().selectedScheduleIndex = value.id;
       },
     },
   },
@@ -33,22 +30,31 @@ export default {
     useScheduleStore,
     deleteSchedule() {
       const idSelectedSchedule = this.selectedSchedule;
-      useScheduleStore().removeSchedule(idSelectedSchedule);
+      this.scheduleStore.removeSchedule(idSelectedSchedule);
       this.nameSchedule = "";
     },
     addSchedule(){
-      useScheduleStore().addSchedule(this.nameSchedule)
+      this.scheduleStore.addSchedule(this.nameSchedule)
       this.nameSchedule = "";
     }
   },
+  watch:{
+    scheduleSelected(newValue, oldValue){
+      //actualiza el index seleccionado del store
+      const index = this.listaDeSchedules.findIndex(schedule => schedule.id === newValue.id);
+
+      this.scheduleStore.selectedScheduleIndex = index;
+    }
+  }
 };
 </script>
 
 <template>
+  selectedScheduleIndex: {{ selectedSchedule }}
   <v-card>
     <v-toolbar color="primary">
       <v-tabs
-        v-model="selectedSchedule"
+        v-model="scheduleSelected"
         align-tabs="title"
       >
         <v-tab
@@ -60,14 +66,15 @@ export default {
       </v-tabs>
     </v-toolbar>
 
-    <v-tabs-window v-model="selectedSchedule">
+    <v-tabs-window v-model="scheduleSelected">
       <v-tabs-window-item
         v-for="schedule in listaDeSchedules"
-        :key="schedule"
+        :key="schedule.id"
         :value="schedule"
       >
         <v-card flat>
-          name schedule: {{ schedule.name }}
+          name schedule: {{ schedule.name }}.
+          id schedule: {{schedule.id}}.
         </v-card>
       </v-tabs-window-item>
     </v-tabs-window>
@@ -90,7 +97,8 @@ export default {
     </v-btn>
     <v-btn
       color="error"
-      @click.prevent="deleteSchedule(nameSchedule)"
+      :disabled="scheduleStore.quantity <= 1"
+      @click.prevent="deleteSchedule()"
     >
       Eliminar Cronograma
     </v-btn>

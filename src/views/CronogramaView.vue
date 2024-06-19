@@ -18,10 +18,10 @@ export default {
   setup(){
     const scheduleStore = useScheduleStore();
     const store = useScheduleStore();
-    const timers = ref(store.schedules[store.selectedSchedule].timers);
+    const timers = ref(store.schedules[store.selectedScheduleIndex].timers);
 
     const onDragEnd = () => {
-      store.schedules[store.selectedSchedule].timers = timers.value;
+      store.schedules[store.selectedScheduleIndex].timers = timers.value;
     };
 
     return {

@@ -8,12 +8,12 @@ export default {
   data() {
     return {
       nameTimer: "",
-      hh: 0,
-      mm: 0,
-      ss: 0,
+      hh: Number(""),
+      mm: Number(""),
+      ss: Number(""),
       rules: [
-        (v) => v >= 0 || "No puede ser negativo",
-        (v) => v <= 59 || "No puede ser mayor a 59",
+        (v:number) => v >= 0 || "No puede ser negativo",
+        (v:number) => v <= 59 || "No puede ser mayor a 59",
       ],
       nameSchedule: "",
     };
@@ -26,7 +26,7 @@ export default {
       return !(this.totalSeconds > 0);
     },
     selectedSchedule() {
-      return useScheduleStore().selectedSchedule;
+      return useScheduleStore().selectedScheduleIndex;
     },
     totalSeconds() :number {
       return Number(this.hh * 3600 + this.mm * 60 + this.ss);
@@ -37,9 +37,9 @@ export default {
     addNewTimer() {
       useScheduleStore().addTimer(this.nameTimer, this.totalSeconds);
       this.nameTimer = "";
-      this.hh = 0;
-      this.mm = 0;
-      this.ss = 0;
+      this.hh = Number("");
+      this.mm = Number("");
+      this.ss = Number("");
     },
   },
 };

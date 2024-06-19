@@ -4,7 +4,7 @@ import {Schedule, Timer, TimerBehavior} from "@/types.ts";
 import {useTimeManagerStore} from "@/stores/TimeManagerStore.ts";
 
 interface ScheduleStore {
-    selectedSchedule: number;
+    selectedScheduleIndex: number;
     selectedTimer: number;
     lastScheduleId: number;
     schedules: Schedule[];
@@ -12,7 +12,7 @@ interface ScheduleStore {
 
 export const useScheduleStore = defineStore("schedule", {
   state: (): ScheduleStore=> ({
-    selectedSchedule: 0,
+    selectedScheduleIndex: 0,
     selectedTimer: 0,
     lastScheduleId: 0,
     schedules: [
@@ -31,20 +31,20 @@ export const useScheduleStore = defineStore("schedule", {
       return state.schedules.length;
     },
     getSelectedTimer(state) :Timer{
-      return state.schedules[state.selectedSchedule].timers[state.selectedTimer];
+      return state.schedules[state.selectedScheduleIndex].timers[state.selectedTimer];
     },
     timeOfSelectedTimer(state) :number{
-      return state.schedules[state.selectedSchedule].timers[state.selectedTimer]
+      return state.schedules[state.selectedScheduleIndex].timers[state.selectedTimer]
         .actualSeconds;
     },
     behaviorOfSelectedTimer(state) :TimerBehavior{
-      return state.schedules[state.selectedSchedule].timers[state.selectedTimer]
+      return state.schedules[state.selectedScheduleIndex].timers[state.selectedTimer]
         .behavior;
     }
   },
   actions: {
     timerById(idTimer:number):Timer {
-      const timer: Timer | undefined = this.schedules[this.selectedSchedule].timers.find(
+      const timer: Timer | undefined = this.schedules[this.selectedScheduleIndex].timers.find(
           (t: Timer) => t.id === idTimer
       );
       if (timer === undefined) {
@@ -61,7 +61,7 @@ export const useScheduleStore = defineStore("schedule", {
       return timer;
     },
     getTimeOfSelectedTimer() {
-      return this.schedules[this.selectedSchedule].timers[this.selectedTimer]
+      return this.schedules[this.selectedScheduleIndex].timers[this.selectedTimer]
         .actualSeconds;
     },
     everySecond() {
@@ -71,14 +71,14 @@ export const useScheduleStore = defineStore("schedule", {
             if (this.timeOfSelectedTimer <= 0) {
               this.selectNextTimer();
             }
-            this.schedules[this.selectedSchedule].timers[this.selectedTimer]
+            this.schedules[this.selectedScheduleIndex].timers[this.selectedTimer]
                 .actualSeconds--;
             break;
           case TimerBehavior.SKIP:
             this.selectNextTimer();
             break;
           case TimerBehavior.IMPORTANT:
-            this.schedules[this.selectedSchedule].timers[this.selectedTimer]
+            this.schedules[this.selectedScheduleIndex].timers[this.selectedTimer]
                 .actualSeconds--;
             break;
         }
@@ -91,7 +91,7 @@ export const useScheduleStore = defineStore("schedule", {
       //revisar si ya terminó
       if (
         this.selectedTimer >=
-        this.schedules[this.selectedSchedule].timers.length - 1
+        this.schedules[this.selectedScheduleIndex].timers.length - 1
       ) {
         useTimeManagerStore().setPausedTrue();
         console.log("terminó");
@@ -102,8 +102,8 @@ export const useScheduleStore = defineStore("schedule", {
       }
     },
     addSchedule(name:string) {
-      this.lastScheduleId++;
-      const newSchedule = {
+      this.lastScheduleId++; //to get a unique id
+      const newSchedule:Schedule = {
         id: this.lastScheduleId,
         lastTimerId: 0,
         name,
@@ -121,10 +121,10 @@ export const useScheduleStore = defineStore("schedule", {
       }
     },
     addTimer(nameTimer:string, initialSeconds:number) {
-      this.schedules[this.selectedSchedule].lastTimerId++;
+      this.schedules[this.selectedScheduleIndex].lastTimerId++;
       //create the timer
       const newTimer:Timer = {
-        id: this.schedules[this.selectedSchedule].lastTimerId,
+        id: this.schedules[this.selectedScheduleIndex].lastTimerId,
         name: nameTimer,
         initialSeconds,
         actualSeconds: initialSeconds,
@@ -132,7 +132,7 @@ export const useScheduleStore = defineStore("schedule", {
         selected: false,
       };
       //add the timer
-      this.schedules[this.selectedSchedule].timers.push(newTimer);
+      this.schedules[this.selectedScheduleIndex].timers.push(newTimer);
     },
     removeTimer(idSchedule: number, idTimer: number) {
       const schedule = this.schedules.find((s) => s.id === idSchedule);
@@ -148,15 +148,15 @@ export const useScheduleStore = defineStore("schedule", {
     removeTimerFromActiveSchedule(idTimer: number) {
       // Remove the timer from the default schedule
       console.log(idTimer);
-      const schedule = this.schedules[this.selectedSchedule];
+      const schedule = this.schedules[this.selectedScheduleIndex];
       const index = schedule.timers.findIndex((timer) => timer.id === idTimer);
       if (index !== -1) {
-        this.schedules[this.selectedSchedule].timers.splice(index, 1);
+        this.schedules[this.selectedScheduleIndex].timers.splice(index, 1);
       }
     },
     decreaseTimer(idTimer:number, seconds:number) {
       const selectedSchedule =
-        useScheduleStore().schedules[this.selectedSchedule];
+        useScheduleStore().schedules[this.selectedScheduleIndex];
       const timerIndex = selectedSchedule.timers.findIndex(
         (t) => t.id === idTimer
       );
@@ -172,26 +172,26 @@ export const useScheduleStore = defineStore("schedule", {
       this.resetAllTimers();
     },
     resetTimer(idTimer:number) {
-      const selectedSchedule = this.schedules[this.selectedSchedule];
+      const selectedSchedule = this.schedules[this.selectedScheduleIndex];
       const timerIndex = selectedSchedule.timers.findIndex(
         (t) => t.id === idTimer
       );
 
       if (timerIndex !== -1) {
-        this.schedules[this.selectedSchedule].timers[timerIndex].actualSeconds =
-          this.schedules[this.selectedSchedule].timers[timerIndex].initialSeconds;
+        this.schedules[this.selectedScheduleIndex].timers[timerIndex].actualSeconds =
+          this.schedules[this.selectedScheduleIndex].timers[timerIndex].initialSeconds;
       }
     },
     resetAllTimers() {
       //resetear todos los timer, igualar actualseconds a initialSecondos
-      const timers:Timer[] = this.schedules[this.selectedSchedule].timers;
+      const timers:Timer[] = this.schedules[this.selectedScheduleIndex].timers;
       for (const timer of timers) {
         this.resetTimer(timer.id)
       }
       this.selectedTimer = 0;
     },
     changeTimerName(idTimer: number, newName: string) {
-      const selectedSchedule = this.schedules[this.selectedSchedule];
+      const selectedSchedule = this.schedules[this.selectedScheduleIndex];
       const timerIndex = selectedSchedule.timers.findIndex(
         (t) => t.id === idTimer
       );
@@ -201,7 +201,7 @@ export const useScheduleStore = defineStore("schedule", {
       }
     },
     updateTimerBehavior(idTimer: number, behavior: TimerBehavior) {
-      const selectedSchedule = this.schedules[this.selectedSchedule];
+      const selectedSchedule = this.schedules[this.selectedScheduleIndex];
       const timerIndex = selectedSchedule.timers.findIndex(
         (t) => t.id === idTimer
       );

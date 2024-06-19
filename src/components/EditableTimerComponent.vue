@@ -57,21 +57,21 @@ export default {
     },
     name() {
       const selectedSchedule =
-        useScheduleStore().schedules[useScheduleStore().selectedSchedule];
+        useScheduleStore().schedules[useScheduleStore().selectedScheduleIndex];
       const timer = selectedSchedule.timers.find((t) => t.id === this.idTimer);
 
       return timer ? timer.name : 0;
     },
     actualSeconds() {
       const selectedSchedule =
-        useScheduleStore().schedules[useScheduleStore().selectedSchedule];
+        useScheduleStore().schedules[useScheduleStore().selectedScheduleIndex];
       const timer = selectedSchedule.timers.find((t) => t.id === this.idTimer);
 
       return timer ? timer.actualSeconds : 0;
     },
     initialSeconds() {
       const selectedSchedule =
-        useScheduleStore().schedules[useScheduleStore().selectedSchedule];
+        useScheduleStore().schedules[useScheduleStore().selectedScheduleIndex];
       const timer = selectedSchedule.timers.find((t) => t.id === this.idTimer);
 
       return timer ? timer.initialSeconds : 0;

@@ -103,7 +103,7 @@ export default {
     },
     initialSeconds() {
       const selectedSchedule =
-        useScheduleStore().schedules[useScheduleStore().selectedSchedule];
+        useScheduleStore().schedules[useScheduleStore().selectedScheduleIndex];
       const timer = selectedSchedule.timers.find((t) => t.id === this.idTimer);
 
       return timer ? timer.initialSeconds : 0;
