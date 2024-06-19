@@ -110,29 +110,28 @@ export default {
     },
     behavior(){
       return this.timer.behavior.valueOf()
+    },
+    progress(){
+      return (this.actualSeconds / this.initialSeconds) * 100;
     }
   },
   mounted() {
     this.selected = options.find((o) => o.behavior === this.timer.behavior) || {} as OptionTimer;
   },
   methods: {
+    selectNextTimer(){
+      useScheduleStore().selectNextTimer();
+    }
   },
 };
 </script>
 
 <template>
   <v-card
-    color="secondary_light_2"
+    color="secondary_light_1"
     elevated
     ma-2
-    class="timer rounded"
-    :class="{
-      priorizada: esPrioritaria,
-      eliminada: isDeleted,
-      startedTimer: isActive,
-      'bg-green': isActive,
-      'elevation-20': isActive,
-    }"
+    class="timer"
   >
     <v-row>
       <v-col class="showtime">
@@ -142,26 +141,35 @@ export default {
       <v-col>
         <v-select v-model="selected" :item-props="true" :items="options" item-title="title" return-object/>
       </v-col>
+      <v-col>
+        <v-btn
+        color="primary"
+        @click="selectNextTimer">
+          siguiente
+        </v-btn>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
+        <v-progress-linear
+            v-model="progress"
+            color="primary"
+            height="8"
+            class="smooth-progress"
+        />
+      </v-col>
     </v-row>
   </v-card>
 </template>
 
 <style scoped>
-* {
-  /* border: orangered 1px solid; */
-}
-
-.priorizada {
-  background-color: orange;
-}
 .timer {
   margin-bottom: 5px;
 }
-
-.eliminada {
-  background-color: red;
-}
 .showtime{
   min-width: 19ch;
+}
+.smooth-progress {
+  transition: width 1s linear;
 }
 </style>

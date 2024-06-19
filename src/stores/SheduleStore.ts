@@ -37,6 +37,10 @@ export const useScheduleStore = defineStore("schedule", {
       return state.schedules[state.selectedSchedule].timers[state.selectedTimer]
         .actualSeconds;
     },
+    behaviorOfSelectedTimer(state) :TimerBehavior{
+      return state.schedules[state.selectedSchedule].timers[state.selectedTimer]
+        .behavior;
+    }
   },
   actions: {
     timerById(idTimer:number):Timer {
@@ -62,14 +66,21 @@ export const useScheduleStore = defineStore("schedule", {
     },
     everySecond() {
       if (!useTimeManagerStore().isPaused) {
-        if (
-          this.schedules[this.selectedSchedule].timers[this.selectedTimer]
-            .actualSeconds <= 0
-        ) {
-          this.selectNextTimer();
-        } else {
-          this.schedules[this.selectedSchedule].timers[this.selectedTimer]
-            .actualSeconds--;
+        switch (this.behaviorOfSelectedTimer) {
+          case TimerBehavior.NORMAL:
+            if (this.timeOfSelectedTimer <= 0) {
+              this.selectNextTimer();
+            }
+            this.schedules[this.selectedSchedule].timers[this.selectedTimer]
+                .actualSeconds--;
+            break;
+          case TimerBehavior.SKIP:
+            this.selectNextTimer();
+            break;
+          case TimerBehavior.IMPORTANT:
+            this.schedules[this.selectedSchedule].timers[this.selectedTimer]
+                .actualSeconds--;
+            break;
         }
       }
       if (useSerialPortStore().isPortOpen) {
@@ -84,6 +95,7 @@ export const useScheduleStore = defineStore("schedule", {
       ) {
         useTimeManagerStore().setPausedTrue();
         console.log("terminó");
+        alert("Ha terminado el último temporizador")
         this.selectedTimer = 0;
       } else {
         this.selectedTimer++;
