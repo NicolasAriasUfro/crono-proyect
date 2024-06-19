@@ -166,16 +166,17 @@ export const useScheduleStore = defineStore("schedule", {
       );
 
       if (timerIndex !== -1) {
-        selectedSchedule.timers[timerIndex].actualSeconds =
-          selectedSchedule.timers[timerIndex].initialSeconds;
+        this.schedules[this.selectedSchedule].timers[timerIndex].actualSeconds =
+          this.schedules[this.selectedSchedule].timers[timerIndex].initialSeconds;
       }
     },
     resetAllTimers() {
       //resetear todos los timer, igualar actualseconds a initialSecondos
-      const timers = this.schedules[this.selectedSchedule].timers;
-      for (let i = 0; i < timers.length; i++) {
-        timers[i].actualSeconds = timers[i].initialSeconds;
+      const timers:Timer[] = this.schedules[this.selectedSchedule].timers;
+      for (const timer of timers) {
+        this.resetTimer(timer.id)
       }
+      this.selectedTimer = 0;
     },
     changeTimerName(idTimer: number, newName: string) {
       const selectedSchedule = this.schedules[this.selectedSchedule];

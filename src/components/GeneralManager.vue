@@ -1,49 +1,64 @@
 <script lang=ts>
 import {useScheduleStore} from "@/stores/SheduleStore";
-import {useTheme} from "vuetify/lib/framework.mjs";
+import {useTheme} from "vuetify";
 import {useAudioStore} from "@/stores/AudioStore";
 import {useTimeManagerStore} from "@/stores/TimeManagerStore.ts";
+import {useGroupStore} from "@/stores/GroupStore.ts";
+import {useSessionStore} from "@/stores/SessionStore.ts";
 
 export default {
   data: () => ({
     audioStore: useAudioStore(),
     theme: useTheme(),
     audio: useAudioStore().audio,
+    sessionStore: useSessionStore(),
   }),
+
   methods: {
-    useTimeManagerStore,
+    useGroupStore,
     useScheduleStore,
-    playAudio() {
-        this.audio.volume = 0.2;
-        this.audio.loop = true;
-        this.audio.play();
-        this.audioStore.playing = true;
+    useTimeManagerStore,
+    async playAudio() {
+      (await this.audio).volume = 0.2;
+      (await this.audio).loop = true;
+      (await this.audio).play();
+      this.audioStore.playing = true;
     },
-    pauseAudio() {
-      this.audio.pause();
+    async pauseAudio() {
+      (await this.audio).pause();
     },
-    muteAudio() {
-      this.audio.muted = true;
+    async muteAudio() {
+      (await this.audio).muted = true;
+      this.sessionStore.music = false;
       this.audioStore.muted = true;
     },
-    unMuteAudio() {
-      this.audio.muted = false;
+    async unMuteAudio() {
+      (await this.audio).muted = false;
+      this.sessionStore.music = true;
       this.audioStore.muted = false;
     },
     generalPause() {
-      useTimeManagerStore().setPausedTrue();
+      useTimeManagerStore().paused = true;
       this.pauseAudio();
     },
     generalPlay() {
-      useTimeManagerStore().setPausedFalse();
+      useTimeManagerStore().paused = false;
       this.playAudio();
     },
     generalReset() {
       this.generalPause();
       this.audioStore.playing = false;
-      useScheduleStore().resetSchedule();
+      useScheduleStore().resetAllTimers();
     },
   },
+  beforeMount() {
+    if (!this.sessionStore.music) {
+      this.audioStore.muted = true;
+      if (this.audioStore.audio_) {
+        this.audioStore.audio_.muted = true;
+      }
+    }
+  }
 };
 </script>
 
