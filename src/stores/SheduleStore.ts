@@ -39,6 +39,23 @@ export const useScheduleStore = defineStore("schedule", {
     },
   },
   actions: {
+    timerById(idTimer:number):Timer {
+      const timer: Timer | undefined = this.schedules[this.selectedSchedule].timers.find(
+          (t: Timer) => t.id === idTimer
+      );
+      if (timer === undefined) {
+        return {
+          id: -1,
+          name: "",
+          selected: false,
+          actualSeconds: 0,
+          initialSeconds: 0,
+          behavior: TimerBehavior.NORMAL
+        }
+      }
+
+      return timer;
+    },
     getTimeOfSelectedTimer() {
       return this.schedules[this.selectedSchedule].timers[this.selectedTimer]
         .actualSeconds;
@@ -170,6 +187,16 @@ export const useScheduleStore = defineStore("schedule", {
         selectedSchedule.timers[timerIndex].name = newName;
       }
     },
+    updateTimerBehavior(idTimer: number, behavior: TimerBehavior) {
+      const selectedSchedule = this.schedules[this.selectedSchedule];
+      const timerIndex = selectedSchedule.timers.findIndex(
+        (t) => t.id === idTimer
+      );
+
+      if (timerIndex !== -1) {
+        selectedSchedule.timers[timerIndex].behavior = behavior;
+      }
+    }
   },
   persist: true,
 });

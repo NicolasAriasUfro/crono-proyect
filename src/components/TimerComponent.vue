@@ -1,7 +1,7 @@
 <script lang=ts>
 import {useScheduleStore} from "@/stores/SheduleStore";
 import {useTheme} from "vuetify";
-import {TimerBehavior} from "@/types.ts";
+import {Timer, TimerBehavior} from "@/types.ts";
 import {$enum} from "ts-enum-util";
 
 interface OptionTimer {
@@ -35,10 +35,6 @@ const options: OptionTimer[] = [
 
 export default {
   props: {
-    isEditable: {
-      type: Boolean,
-      default: false,
-    },
     idTimer: {
       type: Number,
       default: null,
@@ -46,8 +42,8 @@ export default {
   },
   data() {
     return {
+      selected: {} as OptionTimer,
       options: options,
-      selected: "",
       theme: useTheme(),
       timerSubtitle: $enum(TimerBehavior).keys(),
       timerTitle: $enum(TimerBehavior).getKeys(),
@@ -57,12 +53,15 @@ export default {
       isActive: false,
     };
   },
+  watch:{
+    selected(newValue, oldValue){
+      useScheduleStore().updateTimerBehavior(this.idTimer, newValue.behavior);
+    }
+  },
   computed: {
-    behaviorOptions(): any {
-      return options.map(option => ({
-        title: option.title,
-        subtitle: option.subtitle
-      }))},
+    timer():Timer{
+      return useScheduleStore().timerById(this.idTimer);
+    },
     formattedActualTime() {
       const isNegativeTime = this.actualSeconds < 0;
       let seconds = this.actualSeconds;
@@ -97,18 +96,10 @@ export default {
       return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
     },
     name() {
-      const selectedSchedule =
-        useScheduleStore().schedules[useScheduleStore().selectedSchedule];
-      const timer = selectedSchedule.timers.find((t) => t.id === this.idTimer);
-
-      return timer ? timer.name : 0;
+      return this.timer.name
     },
     actualSeconds() {
-      const selectedSchedule =
-        useScheduleStore().schedules[useScheduleStore().selectedSchedule];
-      const timer = selectedSchedule.timers.find((t) => t.id === this.idTimer);
-
-      return timer ? timer.actualSeconds : 0;
+      return this.timer.actualSeconds
     },
     initialSeconds() {
       const selectedSchedule =
@@ -117,15 +108,14 @@ export default {
 
       return timer ? timer.initialSeconds : 0;
     },
+    behavior(){
+      return this.timer.behavior.valueOf()
+    }
   },
-  mounted() {},
+  mounted() {
+    this.selected = options.find((o) => o.behavior === this.timer.behavior) || {} as OptionTimer;
+  },
   methods: {
-    options() {
-      return options
-    },
-    deleteTimer() {
-      useScheduleStore().removeTimerFromActiveSchedule(this.idTimer);
-    },
   },
 };
 </script>
@@ -148,21 +138,9 @@ export default {
       <v-col class="showtime">
         <h3>{{ name }}</h3>
         <strong> {{ formattedActualTime }} / {{ formattedInitialTime }}</strong>
-        <div v-if="isEditable">
-          time interval = {{ timerInterval }}
-        </div>
       </v-col>
       <v-col>
-        selected = {{selected.title}}
         <v-select v-model="selected" :item-props="true" :items="options" item-title="title" return-object/>
-      </v-col>
-      <v-col>
-        <v-btn
-          v-if="isEditable"
-          @click="deleteTimer"
-        >
-          eliminar
-        </v-btn>
       </v-col>
     </v-row>
   </v-card>
