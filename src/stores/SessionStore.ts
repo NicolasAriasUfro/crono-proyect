@@ -1,5 +1,5 @@
 import { API_ROUTE } from "@/main";
-import { CurrentUser, Group, LoginForm, RegisterForm, Timer, TimerBehavior, UserGroup } from "@/types";
+import { CurrentUser, Group, LoginForm, RegisterForm, SocialLogin, Timer, TimerBehavior, UserGroup } from "@/types";
 import axios from "axios";
 import {defineStore} from "pinia";
 
@@ -86,6 +86,21 @@ export const useSessionStore = defineStore('session', {
             try {
                 const url = `${API_ROUTE}/api/user/login`;
                 const response = await axios.post(url, loginForm, {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                this.id = response.data.user_id;
+                this.token = response.data.access_token;
+                this.userName = response.data.user_name;
+            } catch (error) {
+                console.log(error);
+            }
+        },
+        async socialLogin(socialLogin: SocialLogin) {
+            try {
+                const url = `${API_ROUTE}/api/user/social-login`;
+                const response = await axios.post(url, socialLogin, {
                     headers: {
                         'Content-Type': 'application/json'
                     }

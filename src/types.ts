@@ -77,3 +77,7 @@ export interface LoginForm {
     password: string;
 }
 
+export interface SocialLogin {
+    email: string | null;
+    name: string | null;
+}
