@@ -14,7 +14,7 @@ const logIn = () => {
 }
 
 onMounted(() => {
-  sessionStore.fetchGroups(1); //TODO! FIX THIS
+  sessionStore.fetchGroups(sessionStore.id); //TODO! FIX THIS
 })
 </script>
 

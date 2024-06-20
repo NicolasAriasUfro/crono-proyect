@@ -60,7 +60,7 @@ export interface Group {
     name: string;
 }
 
-export interface LoginForm {
+export interface RegisterForm {
     name: string;
     email: string;
     password: string;
@@ -70,5 +70,10 @@ export interface CurrentUser {
     id: number;
     userName: string;
     token: string
+}
+
+export interface LoginForm {
+    email: string;
+    password: string;
 }
 

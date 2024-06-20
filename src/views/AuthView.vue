@@ -7,10 +7,11 @@ import { LoginForm } from '@/types';
 export default {
   components: { GoogleLogin },
   data: () => ({
+    hasRegistered: false,
     message: '',
     messageRegister: '',
     store: useSessionStore(),
-    tab: 0,
+    tab: "",
     tabs: [
       {name:"Login", icon:"mdi-account"},
       {name:"Register", icon:"mdi-account-outline"}
@@ -63,7 +64,6 @@ export default {
   }),
   watch: {
     passwordRegister() {
-      console.log("pass")
       this.validateRePassword();
     }
   },
@@ -73,32 +73,40 @@ export default {
     }
   },
   methods: {
+    accountCreated(isActive: any) {
+      this.email = this.emailRegister;
+      this.reset();
+      this.tab = "login";
+      isActive.value = false;
+    },
     async register() {
       try {
-        const loginForm: LoginForm = {
+        const registerForm: RegisterForm = {
           name: this.userNameRegister,
           email: this.emailRegister,
           password: this.passwordRegister
         }
-        await this.store.register(loginForm);
+        await this.store.register(registerForm);
         this.messageRegister = 'Cuenta creada con éxito'
-        this.reset();
+        this.hasRegistered = true;
       } catch (error) {
         this.messageRegister = 'No se ha podido crear la cuenta ' + (error.response?.data || error.message);
       }
       
     },
-    authUser() {
-      const currentUser = this.authService.checkUserValido(this.email, this.password);
-      if (currentUser != null) {
-        this.store.token = 'some token'; //TODO: TOKEN HERE
-        this.store.userName = currentUser.userName;
-        this.store.groups = currentUser.groups;
+    async authUser() {
+      try {
+        const loginForm: LoginForm = {
+          email: this.email,
+          password: this.password,
+        };
+        await this.store.login(loginForm);
         router.push({ path: '/cronograma' })
-      } else {
+      } catch (error) {
         this.reset();
         this.message = '¡Credenciales incorrectas!';
       }
+      
     },
     validateRePassword() {
         (this.$refs.rePasswordField as any).validate();
@@ -129,34 +137,33 @@ export default {
     transition="dialog-transition"
   >
     <v-tabs
-      :v-value="tab"
+      v-model="tab"
       class="rounded"
       bg-color="primary"
       direction="vertical"
       elevation-10
     >
       <div class="d-flex justify-space-between">
-        <div class="flex-grow-1">
           <v-tab
             class="d-block mx-0"
-            :value="0"
-            width="300px"
+            value="login"
+            width="50%"
           >
             Login
           </v-tab>
-        </div>
-        <div class="flex-grow-1 justify-center">
           <v-tab
             class="d-block mx-0"
-            :value="1"
-            width="300px"
+            value="registro"
+            width="50%"
           >
-            Registro
+            <div>
+              Registro
+            </div>
+            
           </v-tab>
-        </div>
       </div>
-      <v-tabs-window>
-        <v-tabs-window-item :value="0">
+      <v-tabs-window v-model="tab">
+        <v-tabs-window-item value="login">
           <v-card
             rounded="0"
             class="px-8 pb-5 d-flex flex-column justify-center"
@@ -230,7 +237,7 @@ export default {
           </v-card>
         </v-tabs-window-item>
         <v-tabs-window-item
-          :value="1"
+          value="registro"
           class="text-center"
         >
         <v-card
@@ -323,5 +330,35 @@ export default {
         </v-tabs-window-item>
       </v-tabs-window>
     </v-tabs>
+  </v-dialog>
+  <v-dialog v-model="hasRegistered" max-width="500">
+    <template #default="{ isActive }">
+      <v-card
+        color="background"
+        title="¡Cuenta creada exitosamente!"
+        rounded
+      >
+        <v-divider
+          class="mx-15"
+          color="surface"
+        />
+        <v-sheet
+          color="background"
+          class="mx-auto"
+        >
+          
+        </v-sheet>
+
+        <v-card-actions>
+          <v-spacer />
+          <v-btn
+            color="success"
+            @click="accountCreated(isActive);;"
+          >
+            Ok!
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </template>
   </v-dialog>
 </template>

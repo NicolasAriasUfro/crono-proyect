@@ -1,12 +1,12 @@
 import { API_ROUTE } from "@/main";
-import { CurrentUser, Group, LoginForm, Timer, TimerBehavior, UserGroup } from "@/types";
+import { CurrentUser, Group, LoginForm, RegisterForm, Timer, TimerBehavior, UserGroup } from "@/types";
 import axios from "axios";
 import {defineStore} from "pinia";
 
 export const useSessionStore = defineStore('session', {
     state: () => {
         return {
-            id: null,
+            id: 0 as number,
             token: null,
             userName: null,
             music: true,
@@ -43,7 +43,7 @@ export const useSessionStore = defineStore('session', {
             try {
                 const url = `${API_ROUTE}/api/user/add-group`;
                 const data = {
-                    user_id: 1, //TODO: FIX THIS
+                    user_id: this.id, //TODO: FIX THIS
                     group_id: group.id
                 };
                 const response = await axios.post(url, data, {
@@ -68,10 +68,10 @@ export const useSessionStore = defineStore('session', {
                 console.log(error);
             }
         },
-        async register(currentUser: LoginForm) {
+        async register(registerForm: RegisterForm) {
             try {
                 const url = `${API_ROUTE}/api/user/register`;
-                const response = await axios.post(url, currentUser, {
+                const _response = await axios.post(url, registerForm, {
                     headers: {
                         'Content-Type': 'application/json'
                     }
@@ -80,6 +80,22 @@ export const useSessionStore = defineStore('session', {
                 console.log(error);
                 // this is intended, trust me bro
                 throw error;
+            }
+        },
+        async login(loginForm: LoginForm) {
+            try {
+                const url = `${API_ROUTE}/api/user/login`;
+                const response = await axios.post(url, loginForm, {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                console.log(response);
+                this.id = response.data.user_id;
+                this.token = response.data.access_token;
+                this.userName = response.data.user_name;
+            } catch (error) {
+                console.log(error);
             }
         }
     },
