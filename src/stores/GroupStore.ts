@@ -2,6 +2,7 @@ import { API_ROUTE } from "@/main";
 import { Group, Timer, UserGroup } from "@/types";
 import axios from "axios";
 import {defineStore} from "pinia";
+import { useSessionStore } from "./SessionStore";
 
 export const useGroupStore = defineStore("group", {
     state: () => ({
@@ -15,8 +16,11 @@ export const useGroupStore = defineStore("group", {
     }),
     actions: {
         async fetchAllGroups() {
+            const headers = {
+                'Authorization': `Bearer ${useSessionStore().token}`
+            };
             try {
-                const groupsFetch = await axios.get(`${API_ROUTE}/api/groups`)
+                const groupsFetch = await axios.get(`${API_ROUTE}/api/groups`, { headers })
                 const groups: Group[] = groupsFetch.data.map((group: { timer_group_id: any; name: any; }) => {
                     return {
                         id: group.timer_group_id,

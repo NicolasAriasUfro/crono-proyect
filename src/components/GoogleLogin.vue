@@ -22,6 +22,7 @@ export default {
                         };
                         try {
                           await this.store.socialLogin(socialLogin);
+                          await this.store.fetchGroups();
                           setTimeout(() => {
                               router.push({ name: 'cronograma' }), 500
                           })

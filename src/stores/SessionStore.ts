@@ -1,12 +1,11 @@
 import { API_ROUTE } from "@/main";
-import { CurrentUser, Group, LoginForm, RegisterForm, SocialLogin, Timer, TimerBehavior, UserGroup } from "@/types";
+import { Group, LoginForm, RegisterForm, SocialLogin, Timer, TimerBehavior, UserGroup } from "@/types";
 import axios from "axios";
 import {defineStore} from "pinia";
 
 export const useSessionStore = defineStore('session', {
     state: () => {
         return {
-            id: 0 as number,
             token: null,
             userName: null,
             music: true,
@@ -15,9 +14,12 @@ export const useSessionStore = defineStore('session', {
         };
     },
     actions: {
-        async fetchGroups(userId: number) {
+        async fetchGroups() {
             try {
-                const groupsFetch = await axios.get(`${API_ROUTE}/api/groups/user/${userId}`)
+                const headers = {
+                    'Authorization': `Bearer ${this.token}`
+                };
+                const groupsFetch = await axios.get(`${API_ROUTE}/api/groups/user`, { headers })
                 const groups: UserGroup[] = groupsFetch.data.map((group: { timer_group_id: never; name: never; timers: never[]; }) => {
                     return {
                         id: group.timer_group_id,
@@ -43,11 +45,11 @@ export const useSessionStore = defineStore('session', {
             try {
                 const url = `${API_ROUTE}/api/user/add-group`;
                 const data = {
-                    user_id: this.id, //TODO: FIX THIS
                     group_id: group.id
                 };
                 const response = await axios.post(url, data, {
                     headers: {
+                        'Authorization': `Bearer ${this.token}`,
                         'Content-Type': 'application/json'
                     }
                 });
@@ -66,6 +68,7 @@ export const useSessionStore = defineStore('session', {
                 this.groups.push(userGroup);
             } catch (error) {
                 console.log(error);
+                throw error;
             }
         },
         async register(registerForm: RegisterForm) {
@@ -90,7 +93,6 @@ export const useSessionStore = defineStore('session', {
                         'Content-Type': 'application/json'
                     }
                 })
-                this.id = response.data.user_id;
                 this.token = response.data.access_token;
                 this.userName = response.data.user_name;
             } catch (error) {
@@ -105,8 +107,6 @@ export const useSessionStore = defineStore('session', {
                         'Content-Type': 'application/json'
                     }
                 })
-                console.log(response);
-                this.id = response.data.user_id;
                 this.token = response.data.access_token;
                 this.userName = response.data.user_name;
             } catch (error) {

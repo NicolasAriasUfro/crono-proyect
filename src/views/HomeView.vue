@@ -13,9 +13,7 @@ const logIn = () => {
   router.push({ name: "auth" });
 }
 
-onMounted(() => {
-  sessionStore.fetchGroups(sessionStore.id); //TODO! FIX THIS
-})
+
 </script>
 
 <template>
