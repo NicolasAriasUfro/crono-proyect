@@ -11,9 +11,10 @@ import {ref} from 'vue';
 import {useAudioStore} from "@/stores/AudioStore";
 import { UserGroup } from "@/types";
 import {useTimeManagerStore} from "@/stores/TimeManagerStore.ts";
+import FileHandler from "@/components/FileHandler.vue";
 
 export default {
-  components: { GeneralManager, TimerComponent, GeneralGroupManager, TimerGroupComponent, draggable},
+  components: { GeneralManager, TimerComponent, GeneralGroupManager, TimerGroupComponent, draggable, FileHandler},
   setup(){
     const scheduleStore = useScheduleStore();
     const store = useScheduleStore();
@@ -105,6 +106,7 @@ export default {
     <v-tabs-window-item value="personal">
       <div class="crono">
         <GeneralManager />
+        <FileHandler />
         <draggable
           v-model="timers"
           item-key="id"

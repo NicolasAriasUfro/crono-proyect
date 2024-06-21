@@ -10,6 +10,7 @@ export const useSessionStore = defineStore('session', {
             userName: null,
             music: true,
             theme: "moraCremaTheme",
+            currentScheduleId: 0 as number,
             groups: [] as UserGroup[],
         };
     },

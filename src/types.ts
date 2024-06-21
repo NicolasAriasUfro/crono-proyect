@@ -46,7 +46,6 @@ export interface Schedule {
     name: string;
     lastTimerId: number;
     timers: Timer[];
-
 }
 
 export interface UserGroup {
