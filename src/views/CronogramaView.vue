@@ -10,7 +10,6 @@ import draggable from 'vuedraggable';
 import {ref} from 'vue';
 import {useAudioStore} from "@/stores/AudioStore";
 import { UserGroup } from "@/types";
-import { once } from "events";
 import {useTimeManagerStore} from "@/stores/TimeManagerStore.ts";
 
 export default {
@@ -44,7 +43,7 @@ export default {
     };
   },
   watch: {
-    groupSelectedName(newSelected, _oldSelected){
+    groupSelectedName(_newSelected, _oldSelected){
         this.currentGroup = [this.sessionStore.groups.find((u) => u.name === this.groupSelectedName)] as unknown as UserGroup[];
         this.groupStore.currentGroup = this.currentGroup;
         this.groupStore.resetAllTimers();
@@ -57,6 +56,7 @@ export default {
   },
   beforeMount() {
     this.setInitialGroupSelected();
+    this.sessionStore.fetchGroups();
   },
   methods: {
     useScheduleStore,

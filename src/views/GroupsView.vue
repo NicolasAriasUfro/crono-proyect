@@ -21,10 +21,15 @@ export default {
         }
     },
     methods: {
-        unirse() {
-            useSessionStore().addGroup(this.groupSelected);
-            this.alreadySelected = true;
-            this.msg = 'Te has unido al grupo exitosamente.'
+        async unirse() {
+            try {
+              await useSessionStore().addGroup(this.groupSelected);
+              this.alreadySelected = true;
+              this.msg = 'Te has unido al grupo exitosamente.'
+            } catch (error) {
+              
+            }
+            
         }
     },
     beforeMount(){
