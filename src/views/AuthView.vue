@@ -2,7 +2,7 @@
 import GoogleLogin from '../../../crono-proyect/src/components/GoogleLogin.vue'
 import { useSessionStore } from '@/stores/SessionStore';
 import router from '@/router';
-import { LoginForm } from '@/types';
+import { LoginForm, RegisterForm } from '@/types';
 
 export default {
   components: { GoogleLogin },

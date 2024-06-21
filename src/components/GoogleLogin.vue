@@ -14,7 +14,7 @@ export default {
             loginGoogle() {
                 signInWithPopup(this.auth, this.googleProvider)
                     .then(async (result) => {
-                        const credential = GoogleAuthProvider.credentialFromResult(result);
+                        const _credential = GoogleAuthProvider.credentialFromResult(result);
                         const user = result.user;
                         const socialLogin: SocialLogin = {
                           name: user.displayName,
@@ -27,7 +27,7 @@ export default {
                               router.push({ name: 'cronograma' }), 500
                           })
                         } catch (error) {
-                          
+                          console.log(error);
                         }
                         
                     })

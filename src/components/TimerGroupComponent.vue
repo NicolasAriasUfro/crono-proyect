@@ -153,6 +153,6 @@ export default {
 }
 
 .smooth-progress {
-    transition: width 1s cubic-bezier(0.4, 0.0, 0.2, 1); 
+    transition: width 1s linear; 
 }
 </style>
