@@ -12,9 +12,10 @@ import {useAudioStore} from "@/stores/AudioStore";
 import { UserGroup } from "@/types";
 import {useTimeManagerStore} from "@/stores/TimeManagerStore.ts";
 import FileHandler from "@/components/FileHandler.vue";
+import ScheduleSharing from "@/components/ScheduleSharing.vue";
 
 export default {
-  components: { GeneralManager, TimerComponent, GeneralGroupManager, TimerGroupComponent, draggable, FileHandler},
+  components: { GeneralManager, TimerComponent, GeneralGroupManager, TimerGroupComponent, draggable, FileHandler, ScheduleSharing},
   setup(){
     const scheduleStore = useScheduleStore();
     const store = useScheduleStore();
@@ -44,6 +45,9 @@ export default {
     };
   },
   watch: {
+    tab(){
+      this.items = this.sessionStore.groups;
+    },
     groupSelectedName(_newSelected, _oldSelected){
         this.currentGroup = [this.sessionStore.groups.find((u) => u.name === this.groupSelectedName)] as unknown as UserGroup[];
         this.groupStore.currentGroup = this.currentGroup;
@@ -106,7 +110,17 @@ export default {
     <v-tabs-window-item value="personal">
       <div class="crono">
         <GeneralManager />
-        <FileHandler />
+        <v-container class="buttons-container " fluid grid-list-xs>
+          <v-row>
+            <v-col order="2" order-md="1" cols="12" md="6" class="d-flex col-padding justify-center justify-md-start">
+              <ScheduleSharing v-if="useScheduleStore().schedules.length !== 0" />
+            </v-col>
+            <v-col order="1" order-md="2" cols="12" md="6" class="d-flex col-padding justify-center justify-md-end">
+              <FileHandler />
+            </v-col>
+          </v-row>
+        </v-container>
+        
         <draggable
           v-model="timers"
           item-key="id"
@@ -196,9 +210,21 @@ export default {
 .timer-container {
   width: 1000px;
 }
+.buttons-container{
+  width: 1000px;
+
+}
 @media (max-width: 600px) {
     .timer-container {
         width: 40vh !important;
+    }
+    .buttons-container{
+        width: 1000px;
+        padding: 1rem 5%; 
+    }
+    .col-padding {
+        padding-top: 4px !important; /* Adjust this value as needed */
+        padding-bottom: 4px !important; /* Adjust this value as needed */
     }
 }
 </style>

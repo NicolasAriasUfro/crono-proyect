@@ -1,7 +1,7 @@
 import { API_ROUTE } from "@/main";
 import { Group, LoginForm, RegisterForm, SocialLogin, Timer, TimerBehavior, UserGroup } from "@/types";
 import axios from "axios";
-import {defineStore} from "pinia";
+import {acceptHMRUpdate, defineStore} from "pinia";
 
 export const useSessionStore = defineStore('session', {
     state: () => {
@@ -10,7 +10,7 @@ export const useSessionStore = defineStore('session', {
             userName: null,
             music: true,
             theme: "moraCremaTheme",
-            currentScheduleId: 0 as number,
+            currentScheduleId: 1 as number, //!! TODO: WE NEED TO SET THIS SOMEWHERE
             groups: [] as UserGroup[],
         };
     },
@@ -117,3 +117,7 @@ export const useSessionStore = defineStore('session', {
     },
     persist: true,
 })
+
+if (import.meta.hot) {
+    import.meta.hot.accept(acceptHMRUpdate(useSessionStore, import.meta.hot))
+}

@@ -2,22 +2,31 @@
 import { useSessionStore } from '@/stores/SessionStore';
 import { useScheduleStore } from '@/stores/SheduleStore';
 import { Schedule, Timer } from '@/types';
-import { ref } from 'vue';
+import { onBeforeMount, ref } from 'vue';
 
 const sessionStore = useSessionStore();
 const scheduleStore = useScheduleStore();
 const dialog = ref(false)
 const file = ref<File | null>(null);
 const importedSchedule = ref<Schedule | null>(null); 
-const currentSchedule = scheduleStore.schedules.find((u) => u.id = sessionStore.currentScheduleId) as Schedule;
-const exportData = currentSchedule.timers.map(timer => ({
-    schedule_id: currentSchedule.id,
-    schedule_name: currentSchedule.name,
-    id: timer.id,
-    name: timer.name,
-    seconds: timer.initialSeconds,
-    behavior: timer.behavior,
-}));
+const currentSchedule = ref<Schedule | null>(null);
+let exportData: any[] = []
+onBeforeMount(() => {
+    currentSchedule.value = scheduleStore.schedules.find((u) => u.id = sessionStore.currentScheduleId) as Schedule
+    if (currentSchedule.value) {
+        exportData = [
+            currentSchedule.value.timers.map(timer => ({
+                schedule_id: currentSchedule.value?.id,
+                schedule_name: currentSchedule.value?.name,
+                id: timer.id,
+                name: timer.name,
+                seconds: timer.initialSeconds,
+                behavior: timer.behavior,
+            }))
+        ];
+    }
+})
+
 
 const handleParsingError = () => {
     console.log("parsing error!") //TODO:!!!
@@ -88,16 +97,24 @@ const exportFile = () => {
 </script>
 
 <template>
-    <v-container grid-list-xs>
-        <download-csv
-            :data="exportData"
-            :name='exportData[0].schedule_name' 
+    <download-csv
+        v-if="exportData.length !== 0"
+        :data="exportData"
+        :name='exportData[0].schedule_name'
+        class="mx-3"
+    >
+        <v-btn class="btn-padding" size="small" rounded="xl" variant="outlined" color="success" @click="exportFile"
+            append-icon="mdi-download"
         >
-            <v-btn color="success" @click="exportFile">Exportar Cronograma</v-btn>
-        </download-csv>
-        
-        <v-btn color="success" @click="dialog = true">Upload File</v-btn>
-    </v-container>
+            export
+        </v-btn>
+    </download-csv>
+    
+    <v-btn class="btn-padding" size="small" rounded="xl" variant="outlined" color="success" @click="dialog = true"
+        append-icon="mdi-upload"
+    >
+        import
+    </v-btn>
     
     <v-dialog v-model="dialog" max-width="500px">
         <v-card>
@@ -120,3 +137,11 @@ const exportFile = () => {
     </v-dialog>
 </template>
 
+<style>
+@media (max-width: 600px) {
+    .col-padding {
+        padding-top: 4px !important; /* Adjust this value as needed */
+        padding-bottom: 4px !important; /* Adjust this value as needed */
+    }
+}
+</style>
