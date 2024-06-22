@@ -14,18 +14,16 @@ let exportData: any[] = []
 onBeforeMount(() => {
     currentSchedule.value = scheduleStore.schedules.find((u) => u.id = sessionStore.currentScheduleId) as Schedule
     if (currentSchedule.value) {
-        exportData = [
-            currentSchedule.value.timers.map(timer => ({
-                schedule_id: currentSchedule.value?.id,
-                schedule_name: currentSchedule.value?.name,
-                id: timer.id,
-                name: timer.name,
-                seconds: timer.initialSeconds,
-                behavior: timer.behavior,
-            }))
-        ];
+        exportData = currentSchedule.value.timers.map(timer => ({
+            schedule_id: currentSchedule.value?.id,
+            schedule_name: currentSchedule.value?.name,
+            id: timer.id,
+            name: timer.name,
+            seconds: timer.initialSeconds,
+            behavior: timer.behavior,
+        }));
     }
-})
+});
 
 
 const handleParsingError = () => {
