@@ -77,6 +77,9 @@ const firebaseConfig = {
 };
 initializeApp(firebaseConfig);
 
+/* vue-json-csv */
+import JsonCSV from 'vue-json-csv';
+
 /* add icons to the library */
 library.add(faLock);
 library.add(faTrash);
@@ -97,6 +100,7 @@ export const API_ROUTE = 'http://localhost:8000';
 //export const API_ROUTE = 'https://crono-proyect.shuttleapp.rs';
 
 createApp(App)
+    .component('downloadCsv', JsonCSV)
     .component("font-awesome-icon", FontAwesomeIcon)
     .use(router)
     .use(vuetify)

@@ -32,9 +32,13 @@ export default {
             
         }
     },
+    updated(){
+      this.items = useGroupStore().groups;
+    },
     beforeMount(){
       useGroupStore().fetchAllGroups();
       this.groupSelected = useGroupStore().groups[0];
+      this.items = useGroupStore().groups;
     }
 };
 </script>

@@ -1,5 +1,5 @@
 import { API_ROUTE } from "@/main";
-import { Group, Timer, UserGroup } from "@/types";
+import { Group, Schedule, Timer, TimerBehavior, UserGroup } from "@/types";
 import axios from "axios";
 import {defineStore} from "pinia";
 import { useSessionStore } from "./SessionStore";
@@ -21,15 +21,57 @@ export const useGroupStore = defineStore("group", {
             };
             try {
                 const groupsFetch = await axios.get(`${API_ROUTE}/api/groups`, { headers })
-                const groups: Group[] = groupsFetch.data.map((group: { timer_group_id: any; name: any; }) => {
+                const groups: Group[] = groupsFetch.data.map((group: { timer_group_id: any; name: any; owner: any }) => {
                     return {
                         id: group.timer_group_id,
                         name: group.name,
-                    } as UserGroup;
+                        owner: group.owner
+                    } as Group;
                 });
                 this.groups = groups;
             } catch (why) {
                 console.log(why);
+            }
+        },
+        async createGroup(notThecurrentShedule: Schedule) {
+            const currentSchedule: UserGroup = useSessionStore().groups[0];
+            try {
+                const dto = {
+                    timer_group_id: 50, //TODO: CHANGE THIS WHEN SCHEDULE WORKING
+                    name: 'This a totally new group name',
+                    timers: currentSchedule.timers.map(timer => ({
+                        timer_id: timer.id,
+                        name: timer.name,
+                        seconds: timer.initialSeconds
+                    })),
+                };
+                const headers = {
+                    'Authorization': `Bearer ${useSessionStore().token}`,
+                    'Content-Type': 'application/json'
+                }
+                const url = `${API_ROUTE}/api/groups/new`;
+                const response = await axios.post(url, dto, { headers });
+                const userGroup: UserGroup = {
+                    id: response.data.timer_group_id,
+                    name: response.data.name,
+                    timers: response.data.timers.map((timer: { id: never; name: never; seconds: never; }) => ({
+                        id: timer.id,
+                        name: timer.name,
+                        initialSeconds: timer.seconds,
+                        actualSeconds: timer.seconds,
+                        TimerBehavior: TimerBehavior.NORMAL,
+                        selected: false,
+                    })),
+                };
+                const group: Group = {
+                    id: response.data.timer_group_id,
+                    name: response.data.name,
+                    owner: response.data.owner
+                }
+                this.groups.push(group);
+                useSessionStore().groups.push(userGroup);
+            } catch (error) {
+                console.log(error);
             }
         },
         // getTimeOfSelectedTimer() {
