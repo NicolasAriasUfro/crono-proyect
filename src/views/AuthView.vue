@@ -89,7 +89,7 @@ export default {
         await this.store.register(registerForm);
         this.messageRegister = 'Cuenta creada con éxito'
         this.hasRegistered = true;
-      } catch (error) {
+      } catch (error: any) {
         this.messageRegister = 'No se ha podido crear la cuenta ' + (error.response?.data || error.message);
       }
       

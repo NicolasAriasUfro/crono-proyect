@@ -21,6 +21,12 @@ export default {
         }
     },
     methods: {
+        itemProps(item: { name: any; ownerName: any; }) {
+            return {
+              title: item.name,
+              subtitle: `Creado por: ${item.ownerName}`,
+            }
+        },
         async unirse() {
             try {
               await useSessionStore().addGroup(this.groupSelected);
@@ -49,6 +55,7 @@ export default {
       v-model="groupSelected"
       :items="items"
       item-title="name"
+      :item-props="itemProps"
       hint="Grupo seleccionado"
       label="Selecciona un grupo"
       density="compact"
@@ -60,6 +67,7 @@ export default {
       return-object
       single-line
       class="v-select"
+      
     />
   </v-container>
   <div v-if="groupSelected">
