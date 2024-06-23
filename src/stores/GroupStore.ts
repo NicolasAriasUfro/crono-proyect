@@ -1,6 +1,6 @@
 import { API_ROUTE } from "@/main";
 import { Group, Schedule, Timer, TimerBehavior, UserGroup } from "@/types";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import {defineStore} from "pinia";
 import { useSessionStore } from "./SessionStore";
 
@@ -21,11 +21,12 @@ export const useGroupStore = defineStore("group", {
             };
             try {
                 const groupsFetch = await axios.get(`${API_ROUTE}/api/groups`, { headers })
-                const groups: Group[] = groupsFetch.data.map((group: { timer_group_id: any; name: any; owner: any }) => {
+                const groups: Group[] = groupsFetch.data.map((group: { timer_group_id: any; name: any; owner: any; owner_name: any; }) => {
                     return {
                         id: group.timer_group_id,
                         name: group.name,
-                        owner: group.owner
+                        isOwner: group.owner,
+                        ownerName: group.owner_name
                     } as Group;
                 });
                 this.groups = groups;
@@ -38,7 +39,7 @@ export const useGroupStore = defineStore("group", {
             try {
                 const dto = {
                     timer_group_id: 50, //TODO: CHANGE THIS WHEN SCHEDULE WORKING
-                    name: 'This a totally new group name',
+                    name: notThecurrentShedule.name,
                     timers: currentSchedule.timers.map(timer => ({
                         timer_id: timer.id,
                         name: timer.name,
@@ -66,12 +67,15 @@ export const useGroupStore = defineStore("group", {
                 const group: Group = {
                     id: response.data.timer_group_id,
                     name: response.data.name,
-                    owner: response.data.owner
+                    isOwner: true,
+                    ownerName: useSessionStore().userName
                 }
                 this.groups.push(group);
                 useSessionStore().groups.push(userGroup);
-            } catch (error) {
+            } catch (error: any) {
                 console.log(error);
+                console.log(error.stack);
+                throw error;
             }
         },
         // getTimeOfSelectedTimer() {

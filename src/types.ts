@@ -57,7 +57,8 @@ export interface UserGroup {
 export interface Group {
     id: number;
     name: string;
-    owner: number;
+    isOwner: boolean;
+    ownerName: string;
 }
 
 export interface RegisterForm {

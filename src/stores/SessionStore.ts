@@ -7,7 +7,7 @@ export const useSessionStore = defineStore('session', {
     state: () => {
         return {
             token: null,
-            userName: null,
+            userName: {} as string,
             music: true,
             theme: "moraCremaTheme",
             currentScheduleId: 1 as number, //!! TODO: WE NEED TO SET THIS SOMEWHERE
