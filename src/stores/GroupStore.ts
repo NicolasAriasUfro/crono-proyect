@@ -78,6 +78,29 @@ export const useGroupStore = defineStore("group", {
                 throw error;
             }
         },
+        async deleteGroup(groupSelected: Group) {
+            try {
+                const dto = {
+                    timer_group_id: groupSelected.id,
+                    name: groupSelected.name,
+                    owner: groupSelected.isOwner,
+                    owner_name: groupSelected.ownerName,
+                };
+                const headers = {
+                    'Authorization': `Bearer ${useSessionStore().token}`,
+                    'Content-Type': 'application/json'
+                }
+                const url = `${API_ROUTE}/api/groups/delete`;
+                const response = await axios.delete(url, { 
+                    headers,
+                    data: dto,
+                });
+                console.log(response)
+            } catch (error: any) {
+                console.log(error.stack)
+                console.log(error)
+            }
+        },
         // getTimeOfSelectedTimer() {
         //     return this.groups[this.selectedGroup].cronograma[0].timers[
         //         this.selectedTimer
