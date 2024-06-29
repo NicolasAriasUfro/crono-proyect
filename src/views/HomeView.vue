@@ -53,7 +53,7 @@ const logIn = () => {
     </div>
     <v-container
       fluid
-      class="elevation-1 content-wrapper"
+      class="elevation-1 content-wrapper pl-4"
     >
       <RouterView />
     </v-container>
