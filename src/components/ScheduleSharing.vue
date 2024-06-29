@@ -28,7 +28,13 @@ const isFormValid = computed(() => {
 
 const changeName = (isActive: { value: boolean; }) => {
     if (currentSchedule.value) {
-        currentSchedule.value.name = newScheduleName.value;
+        const newSchedule: Schedule = {
+            id: currentSchedule.value.id,
+            name: newScheduleName.value,
+            lastTimerId: currentSchedule.value.lastTimerId,
+            timers: currentSchedule.value.timers
+        }
+        currentSchedule.value = newSchedule;
         shareSchedule(isActive);
         changingName.value = false;
         groupNameExists.value = false;
