@@ -2,6 +2,7 @@
 import {getAuth, GoogleAuthProvider, signInWithPopup} from 'firebase/auth'
 import {useSessionStore} from '@/stores/SessionStore';
 import router from '@/router';
+import { SocialLogin } from '@/types';
 
 export default {
         data: () => ({
@@ -12,14 +13,23 @@ export default {
         methods: {
             loginGoogle() {
                 signInWithPopup(this.auth, this.googleProvider)
-                    .then( (result) => {
-                        const credential = GoogleAuthProvider.credentialFromResult(result);
+                    .then(async (result) => {
+                        const _credential = GoogleAuthProvider.credentialFromResult(result);
                         const user = result.user;
-                        this.store.token = credential?.accessToken; 
-                        this.store.userName = user.displayName;
-                        setTimeout(() => {
-                            router.push({ name: 'cronograma' }), 500
-                        })
+                        const socialLogin: SocialLogin = {
+                          name: user.displayName,
+                          email: user.email,
+                        };
+                        try {
+                          await this.store.socialLogin(socialLogin);
+                          await this.store.fetchGroups();
+                          setTimeout(() => {
+                              router.push({ name: 'cronograma' }), 500
+                          })
+                        } catch (error) {
+                          console.log(error);
+                        }
+                        
                     })
                     .catch( (why) => {
                         console.log("failed" + why);

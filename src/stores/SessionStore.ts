@@ -1,23 +1,26 @@
 import { API_ROUTE } from "@/main";
-import { Group, Timer, TimerBehavior, UserGroup } from "@/types";
+import { Group, LoginForm, RegisterForm, SocialLogin, Timer, TimerBehavior, UserGroup } from "@/types";
 import axios from "axios";
-import {defineStore} from "pinia";
+import {acceptHMRUpdate, defineStore} from "pinia";
 
 export const useSessionStore = defineStore('session', {
     state: () => {
         return {
-            id: null,
             token: null,
-            userName: null,
+            userName: {} as string,
             music: true,
             theme: "moraCremaTheme",
+            currentScheduleId: 1 as number, //!! TODO: WE NEED TO SET THIS SOMEWHERE
             groups: [] as UserGroup[],
         };
     },
     actions: {
-        async fetchGroups(userId: number) {
+        async fetchGroups() {
             try {
-                const groupsFetch = await axios.get(`${API_ROUTE}/api/groups/user/${userId}`)
+                const headers = {
+                    'Authorization': `Bearer ${this.token}`
+                };
+                const groupsFetch = await axios.get(`${API_ROUTE}/api/groups/user`, { headers })
                 const groups: UserGroup[] = groupsFetch.data.map((group: { timer_group_id: never; name: never; timers: never[]; }) => {
                     return {
                         id: group.timer_group_id,
@@ -43,11 +46,11 @@ export const useSessionStore = defineStore('session', {
             try {
                 const url = `${API_ROUTE}/api/user/add-group`;
                 const data = {
-                    user_id: 1, //TODO: FIX THIS
                     group_id: group.id
                 };
                 const response = await axios.post(url, data, {
                     headers: {
+                        'Authorization': `Bearer ${this.token}`,
                         'Content-Type': 'application/json'
                     }
                 });
@@ -64,7 +67,49 @@ export const useSessionStore = defineStore('session', {
                     }))
                 };
                 this.groups.push(userGroup);
-                console.log(this.groups);
+            } catch (error) {
+                console.log(error);
+                throw error;
+            }
+        },
+        async register(registerForm: RegisterForm) {
+            try {
+                const url = `${API_ROUTE}/api/user/register`;
+                const _response = await axios.post(url, registerForm, {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+            } catch (error) {
+                console.log(error);
+                // this is intended, trust me bro
+                throw error;
+            }
+        },
+        async login(loginForm: LoginForm) {
+            try {
+                const url = `${API_ROUTE}/api/user/login`;
+                const response = await axios.post(url, loginForm, {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                this.token = response.data.access_token;
+                this.userName = response.data.user_name;
+            } catch (error) {
+                console.log(error);
+            }
+        },
+        async socialLogin(socialLogin: SocialLogin) {
+            try {
+                const url = `${API_ROUTE}/api/user/social-login`;
+                const response = await axios.post(url, socialLogin, {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                this.token = response.data.access_token;
+                this.userName = response.data.user_name;
             } catch (error) {
                 console.log(error);
             }
@@ -72,3 +117,7 @@ export const useSessionStore = defineStore('session', {
     },
     persist: true,
 })
+
+if (import.meta.hot) {
+    import.meta.hot.accept(acceptHMRUpdate(useSessionStore, import.meta.hot))
+}

@@ -22,7 +22,7 @@ export const useScheduleStore = defineStore("schedule", {
         lastTimerId: 0,
         timers: [
           { id: 0, name: "bienvenida", initialSeconds: 5, actualSeconds: 5 , behavior: TimerBehavior.NORMAL, selected:false},
-        ],
+        ] as Timer[],
       },
     ],
   }),

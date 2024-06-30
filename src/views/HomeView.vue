@@ -13,9 +13,7 @@ const logIn = () => {
   router.push({ name: "auth" });
 }
 
-onMounted(() => {
-  sessionStore.fetchGroups(1); //TODO! FIX THIS
-})
+
 </script>
 
 <template>
@@ -55,7 +53,7 @@ onMounted(() => {
     </div>
     <v-container
       fluid
-      class="elevation-1 content-wrapper"
+      class="elevation-1 content-wrapper pl-4"
     >
       <RouterView />
     </v-container>

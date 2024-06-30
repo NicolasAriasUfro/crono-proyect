@@ -46,7 +46,6 @@ export interface Schedule {
     name: string;
     lastTimerId: number;
     timers: Timer[];
-
 }
 
 export interface UserGroup {
@@ -58,4 +57,28 @@ export interface UserGroup {
 export interface Group {
     id: number;
     name: string;
+    isOwner: boolean;
+    ownerName: string;
+}
+
+export interface RegisterForm {
+    name: string;
+    email: string;
+    password: string;
+}
+
+export interface CurrentUser {
+    id: number;
+    userName: string;
+    token: string
+}
+
+export interface LoginForm {
+    email: string;
+    password: string;
+}
+
+export interface SocialLogin {
+    email: string | null;
+    name: string | null;
 }
