@@ -115,14 +115,14 @@ const importSchedule = () => {
         class="mx-3"
     >
         <v-btn class="btn-padding" size="small" rounded="xl" variant="outlined" color="success" @click="exportFile"
-            append-icon="mdi-download"
+            append-icon="mdi-upload"
         >
             export
         </v-btn>
     </download-csv>
     
     <v-btn class="btn-padding" size="small" rounded="xl" variant="outlined" color="success" @click="dialog = true"
-        append-icon="mdi-upload"
+        append-icon="mdi-download"
     >
         import
     </v-btn>
