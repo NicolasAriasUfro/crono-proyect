@@ -130,12 +130,12 @@ const importSchedule = () => {
     <v-dialog v-model="dialog" max-width="500px">
         <v-card>
             <v-card-title>
-                <span class="headline">Upload File</span>
+                <span class="headline">Subir archivo</span>
             </v-card-title>
             <v-card-text>
                 <v-file-input
                     v-model="file"
-                    label="Select File"
+                    label="Seleccionar archivo"
                     accept=".csv, .xlsx"
                     clearable
                     @change="handleFileChange"
