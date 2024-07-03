@@ -209,6 +209,18 @@ export const useScheduleStore = defineStore("schedule", {
       if (timerIndex !== -1) {
         selectedSchedule.timers[timerIndex].behavior = behavior;
       }
+    },
+    saveImportedSchedule(schedule: Schedule) {
+      try {
+        //cambia id del cronograma
+        schedule.id = this.lastScheduleId++;
+
+        this.schedules.push(schedule);
+      }catch (error) {
+        console.error(error);
+        return false;
+      }
+      return true;
     }
   },
   persist: true,

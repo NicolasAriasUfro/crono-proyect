@@ -10,6 +10,7 @@ const dialog = ref(false)
 const file = ref<File | null>(null);
 const importedSchedule = ref<Schedule | null>(null); 
 const currentSchedule = ref<Schedule | null>(null);
+let isValidSchedule = false;
 let exportData: any[] = []
 onBeforeMount(() => {
     currentSchedule.value = scheduleStore.schedules.find((u) => u.id = sessionStore.currentScheduleId) as Schedule
@@ -27,6 +28,7 @@ onBeforeMount(() => {
 
 
 const handleParsingError = () => {
+    isValidSchedule = false;
     console.log("parsing error!") //TODO:!!!
 }
 
@@ -38,9 +40,12 @@ const handleFileChange = () => {
             const csv = e.target?.result as string;
             const parseResult = parseCSV(csv);
             if (parseResult) {
-                importedSchedule.value = parseResult 
+                importedSchedule.value = parseResult;
+                console.log(isValidSchedule)
+                isValidSchedule = true;
+                console.log(isValidSchedule)
                 console.log(importedSchedule.value);
-                //await scheduleStore.saveImportedSchedule(importedSchedule)
+
             } else {
                 handleParsingError();
             }
@@ -92,6 +97,14 @@ const parseCSV = (data: string) => {
 const exportFile = () => {
     console.log("export file");
 }
+const importSchedule = () => {
+  dialog.value = false;
+  const schedule = importedSchedule.value;
+  if (!schedule) {
+    return;
+  }
+  scheduleStore.saveImportedSchedule(schedule)
+}
 </script>
 
 <template>
@@ -129,7 +142,8 @@ const exportFile = () => {
             </v-card-text>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" @click="dialog = false">Cancel</v-btn>
+              <v-btn color="blue darken-1" @click="importSchedule" :disabled="!importedSchedule" >Importar</v-btn>
+              <v-btn color="red darken-1" @click="dialog = false">Cancelar</v-btn>
             </v-card-actions>
         </v-card>
     </v-dialog>
