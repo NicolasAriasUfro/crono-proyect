@@ -137,6 +137,7 @@ const importSchedule = () => {
                     v-model="file"
                     label="Select File"
                     accept=".csv, .xlsx"
+                    clearable
                     @change="handleFileChange"
                 ></v-file-input>
             </v-card-text>
