@@ -22,8 +22,11 @@ export default {
     },
     computed: {
         isOwner() {
-          const isOwner = true;
-          return this.groupSelected.isOwner == isOwner;
+          //verificar que existe algun grupo seleccionado
+          if(this.groupSelected){
+            return this.groupSelected.isOwner;
+          }
+          return false;
         }
     },
     methods: {
