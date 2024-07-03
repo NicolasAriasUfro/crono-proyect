@@ -1,8 +1,10 @@
 <script lang="ts">
 import {useSerialPortStore} from "@/stores/SerialPortStore";
+import SyncComponent from "@/components/sync/SyncComponent.vue";
 
 export default {
   name: "ConfigView",
+  components: {SyncComponent},
   methods: {
     useSerialPortStore,
     async selectReciverData() {
@@ -38,6 +40,7 @@ export default {
     </v-btn>
   </v-container>
   <v-divider class="ma-4" />
+  <SyncComponent />
 </template>
 
 <style scoped></style>
