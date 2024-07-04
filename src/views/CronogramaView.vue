@@ -113,14 +113,14 @@ export default {
         <v-container class="buttons-container " fluid grid-list-xs>
           <v-row>
             <v-col order="2" order-md="1" cols="12" md="6" class="d-flex col-padding justify-center justify-md-start">
-              <ScheduleSharing v-if="useScheduleStore().schedules.length !== 0" />
+              <ScheduleSharing v-if="useScheduleStore().quantity !== 0" />
             </v-col>
             <v-col order="1" order-md="2" cols="12" md="6" class="d-flex col-padding justify-center justify-md-end">
               <FileHandler />
             </v-col>
           </v-row>
         </v-container>
-        
+        <h3 v-if="timers >= 0">Por favor, agregue nuevos temporizadores <br>o selecciones otro cronograma.</h3>
         <draggable
           v-model="timers"
           item-key="id"
