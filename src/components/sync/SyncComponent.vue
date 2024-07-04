@@ -32,7 +32,6 @@ const uploadAllScheduleToServer = () => {
 };
 const uploadScheduleToServer = (schedule: Schedule) => {
   try {
-    console.log("Subiendo cambios");
     const endpoint = "/api/cronograma/new";
     const headers = {
       Authorization: "Bearer " + useSessionStore().token,
@@ -46,18 +45,52 @@ const uploadScheduleToServer = (schedule: Schedule) => {
         .post(API_ROUTE + endpoint, scheduleDTO, {headers})
         .then((response) => {
           console.log(response.data);
+          //cambia el "id" según el "id" de la base de datos
+          schedule.id = response.data.id;
+          console.info("Cronograma subido con éxito");
+          uploadTimersOfSchedule(schedule);
         })
         .catch((error) => {
-          console.log(error);
+          console.error("Error al intentar subir el cronograma");
+          console.error(error);
         });
-    //subir los timers del cronograma
 
   }catch (e) {
     console.error(e);
     throw new Error("Error al subir cambios");
   }
 };
-
+const uploadTimersOfSchedule = (schedule: Schedule) => {
+  try {
+    console.log("Subiendo timers");
+    const endpoint = "/api/cronograma/add-timer";
+    const headers = {
+      Authorization: "Bearer " + useSessionStore().token,
+    };
+    for (const timer of schedule.timers) {
+      //cronograma_id, timer: {name, seconds}
+      const timerOfScheduleDTO = {
+        cronograma_id: schedule.id,
+        timer: {
+          name: timer.name,
+          seconds: timer.initialSeconds,
+        },
+      };
+      axios
+          .post(API_ROUTE + endpoint, timerOfScheduleDTO, {headers})
+          .then((response) => {
+            console.log(response.data);
+          })
+          .catch((error) => {
+            console.error("error al intentar subir el timer")
+            console.error(error);
+          });
+    }
+  }catch (e) {
+    console.error(e);
+    throw new Error("Error al subir cambios");
+  }
+};
 </script>
 
 <template>
