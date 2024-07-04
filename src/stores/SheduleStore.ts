@@ -134,7 +134,21 @@ export const useScheduleStore = defineStore("schedule", {
       if(this.quantity <= 1){
         console.warn("No puedes eliminar el último cronograma")
       }
-      this.schedules.splice(indexSchedule, 1);
+      axios.delete(API_ROUTE + "/api/cronograma/delete", {headers:{
+        Authorization: `Bearer ${useSessionStore().token}`
+        },data:{
+            cronograma_id: this.schedules[indexSchedule].id,
+            name: this.schedules[indexSchedule].name
+        }}).then(response =>{
+        console.log(response.data)
+        this.schedules.splice(indexSchedule, 1);
+      }).catch((why) => {
+        console.error("Error al borrar el cronograma de la base de datos:" + why)
+      });
+
+
+
+
     },
     addTimer(nameTimer:string, initialSeconds:number) {
       this.schedules[this.selectedScheduleIndex].lastTimerId++;
