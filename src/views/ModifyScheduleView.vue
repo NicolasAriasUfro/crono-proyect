@@ -16,7 +16,7 @@ export default {
     listaDeSchedules(){
       return useScheduleStore().schedules as Schedule[];
     },
-    selectedSchedule: {
+    IndexSelectedSchedule: {
       get() {
         return useScheduleStore().selectedScheduleIndex;
       },
@@ -29,8 +29,7 @@ export default {
   methods: {
     useScheduleStore,
     deleteSchedule() {
-      const idSelectedSchedule = this.selectedSchedule;
-      this.scheduleStore.removeSchedule(idSelectedSchedule);
+      this.scheduleStore.removeSchedule(this.IndexSelectedSchedule);
       this.nameSchedule = "";
     },
     addSchedule(){
@@ -39,7 +38,7 @@ export default {
     }
   },
   watch:{
-    scheduleSelected(newValue, oldValue){
+    scheduleSelected(newValue, _oldValue){
       //actualiza el index seleccionado del store
       const index = this.listaDeSchedules.findIndex(schedule => schedule.id === newValue.id);
 
@@ -50,7 +49,7 @@ export default {
 </script>
 
 <template>
-  selectedScheduleIndex: {{ selectedSchedule }}
+  selectedScheduleIndex: {{ IndexSelectedSchedule }}
   <v-card>
     <v-toolbar color="primary">
       <v-tabs
