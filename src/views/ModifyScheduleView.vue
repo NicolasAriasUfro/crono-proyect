@@ -1,9 +1,11 @@
 <script lang=ts>
 import {useScheduleStore} from "@/stores/SheduleStore";
 import {Schedule} from "@/types.ts";
+import ScheduleDetails from "@/components/schedule/ScheduleDetails.vue";
 
 export default {
   name: "ModifyScheduleView",
+  components: {ScheduleDetails},
   data() {
     return {
       nameSchedule: "",
@@ -71,10 +73,7 @@ export default {
         :key="schedule.id"
         :value="schedule"
       >
-        <v-card flat>
-          name schedule: {{ schedule.name }}.
-          id schedule: {{schedule.id}}.
-        </v-card>
+        <ScheduleDetails :schedule="schedule" />
       </v-tabs-window-item>
     </v-tabs-window>
   </v-card>
