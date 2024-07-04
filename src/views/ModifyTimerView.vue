@@ -46,8 +46,9 @@ export default {
 </script>
 
 <template>
-  Mi Cronograma
-
+  <h2>
+  Cronograma: {{ useScheduleStore().schedules[selectedSchedule].name }}.
+    </h2>
   <div
     v-for="timer in useScheduleStore().schedules[selectedSchedule].timers"
     :key="timer.id"
