@@ -2,6 +2,9 @@ import {useSerialPortStore} from "./SerialPortStore.ts";
 import {defineStore} from "pinia";
 import {Schedule, Timer, TimerBehavior} from "@/types.ts";
 import {useTimeManagerStore} from "@/stores/TimeManagerStore.ts";
+import axios from "axios";
+import {useSessionStore} from "@/stores/SessionStore.ts";
+import {API_ROUTE} from "@/main.ts";
 
 interface ScheduleStore {
     selectedScheduleIndex: number;
@@ -40,6 +43,10 @@ export const useScheduleStore = defineStore("schedule", {
     behaviorOfSelectedTimer(state) :TimerBehavior{
       return state.schedules[state.selectedScheduleIndex].timers[state.selectedTimer]
         .behavior;
+    },
+    newScheduleId(state): number {
+      state.lastScheduleId++;
+      return state.lastScheduleId;
     }
   },
   actions: {
@@ -102,23 +109,32 @@ export const useScheduleStore = defineStore("schedule", {
       }
     },
     addSchedule(name:string) {
-      this.lastScheduleId++; //to get a unique id
-      const newSchedule:Schedule = {
-        id: this.lastScheduleId,
-        lastTimerId: 0,
-        name,
-        timers: [],
-      };
-      this.schedules.push(newSchedule);
-      return newSchedule;
-    },
-    removeSchedule(idSchedule:number){
-      const index = this.schedules.findIndex(
-        (schedule) => schedule.id === idSchedule
-      );
-      if (index !== -1) {
-        this.schedules.splice(index, 1);
+      const headers = {
+        Authorization: `Bearer ${useSessionStore().token}`
       }
+
+      axios.post(API_ROUTE + "/api/cronograma/new", {
+        name:name,
+        cronograma_id: this.newScheduleId
+      }, {headers})
+          .then(response =>{
+          console.log(response.data)
+          const newSchedule:Schedule = {
+          id: response.data.cronograma_id,
+          lastTimerId: 0,
+          name,
+          timers: [],
+          };
+          this.schedules.push(newSchedule);
+      }).catch((e) => {
+        console.error("No se pudo crear el cronograma" + e)
+      })
+    },
+    removeSchedule(indexSchedule:number){
+      if(this.quantity <= 1){
+        console.warn("No puedes eliminar el último cronograma")
+      }
+      this.schedules.splice(indexSchedule, 1);
     },
     addTimer(nameTimer:string, initialSeconds:number) {
       this.schedules[this.selectedScheduleIndex].lastTimerId++;
