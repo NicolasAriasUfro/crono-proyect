@@ -4,7 +4,6 @@ import { useScheduleStore } from '@/stores/SheduleStore';
 import { Schedule, Timer } from '@/types';
 import { onBeforeMount, ref } from 'vue';
 
-const sessionStore = useSessionStore();
 const scheduleStore = useScheduleStore();
 const dialog = ref(false)
 const file = ref<File | null>(null);
@@ -13,7 +12,7 @@ const currentSchedule = ref<Schedule | null>(null);
 let isValidSchedule = false;
 let exportData: any[] = []
 onBeforeMount(() => {
-    currentSchedule.value = scheduleStore.schedules.find((u) => u.id = sessionStore.currentScheduleId) as Schedule
+    currentSchedule.value  =scheduleStore.selectedSchedule;
     if (currentSchedule.value) {
         exportData = currentSchedule.value.timers.map(timer => ({
             schedule_id: currentSchedule.value?.id,
