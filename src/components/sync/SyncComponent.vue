@@ -14,6 +14,23 @@ const updateAllScheduleFromServer = () => {
     .get(API_ROUTE + endpoint, {headers})
     .then((response) => {
       console.log(response.data);
+      const schedulesDTO = response.data;
+      const schedules: Schedule[] = schedulesDTO.map((scheduleDTO: any) => {
+        const schedule: Schedule = {
+          id: scheduleDTO.cronograma_id,
+          name: scheduleDTO.name,
+          timers: scheduleDTO.timers.map((timerDTO: any) => {
+            return {
+              id: timerDTO.timer_id,
+              name: timerDTO.name,
+              initialSeconds: timerDTO.seconds,
+            };
+          }),
+          lastTimerId: scheduleDTO.timers.length,
+        };
+        return schedule;
+      });
+      useScheduleStore().schedules = schedules;
     })
     .catch((error) => {
       console.log(error);
@@ -32,7 +49,7 @@ const uploadAllScheduleToServer = () => {
 };
 const uploadScheduleToServer = (schedule: Schedule) => {
   try {
-    const endpoint = "/api/cronograma/new";
+
     const headers = {
       Authorization: "Bearer " + useSessionStore().token,
     };
@@ -41,19 +58,39 @@ const uploadScheduleToServer = (schedule: Schedule) => {
       cronograma_id: schedule.id,
       name: schedule.name,
     };
-    axios
-        .post(API_ROUTE + endpoint, scheduleDTO, {headers})
+    let existeEnLaBD = false;
+    //- PUT `/api/cronograma/update` - requires `cronograma_id, name`, returns the cronograma
+    const endpointPut = "/api/cronograma/update";
+    axios.put(API_ROUTE + endpointPut, scheduleDTO, {headers})
         .then((response) => {
           console.log(response.data);
-          //cambia el "id" según el "id" de la base de datos
-          schedule.id = response.data.id;
-          console.info("Cronograma subido con éxito");
-          uploadTimersOfSchedule(schedule);
+          console.info("Cronograma actualizado con éxito");
+          existeEnLaBD = true;
         })
         .catch((error) => {
-          console.error("Error al intentar subir el cronograma");
-          console.error(error);
+          console.error("Error al intentar actualizar el cronograma" + error);
         });
+
+    const endpointPost = "/api/cronograma/new";
+    if (!existeEnLaBD) {
+      axios
+          .post(API_ROUTE + endpointPost, scheduleDTO, {headers})
+          .then((response) => {
+            console.log(response.data);
+            //cambia el "id" según el "id" de la base de datos
+            schedule.id = response.data.cronograma_id;
+            console.info("Cronograma subido con éxito");
+
+          })
+          .catch((error) => {
+            console.error("Error al intentar subir el cronograma o el cronograma ya existe");
+            //TODO: usar logica apra revisar si el cronograma existe
+            console.error(error);
+          });
+    }
+    //subir los cronogramas igualmente
+    uploadTimersOfSchedule(schedule);
+
 
   }catch (e) {
     console.error(e);
@@ -62,7 +99,7 @@ const uploadScheduleToServer = (schedule: Schedule) => {
 };
 const uploadTimersOfSchedule = (schedule: Schedule) => {
   try {
-    console.log("Subiendo timers");
+    console.info("Subiendo timers del cronograma: " + schedule.name);
     const endpoint = "/api/cronograma/add-timer";
     const headers = {
       Authorization: "Bearer " + useSessionStore().token,
@@ -77,7 +114,7 @@ const uploadTimersOfSchedule = (schedule: Schedule) => {
         },
       };
       axios
-          .post(API_ROUTE + endpoint, timerOfScheduleDTO, {headers})
+          .post(API_ROUTE + endpoint, timerOfScheduleDTO, {headers,data: timerOfScheduleDTO})
           .then((response) => {
             console.log(response.data);
           })
