@@ -106,7 +106,7 @@ export default {
     <v-dialog max-width="500">
       <template #activator="{ props: activatorProps }">
         <v-btn
-          v-if="isOwner == 1" 
+          v-if="isOwner == 1"
           v-bind="activatorProps"
           color="error"
           variant="outlined"
