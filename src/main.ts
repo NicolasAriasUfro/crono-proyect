@@ -96,8 +96,8 @@ library.add(faGithub);
 library.add(faCircleArrowLeft);
 library.add(faCircleArrowRight);
 
-export const API_ROUTE = 'http://localhost:8000';
-//export const API_ROUTE = 'https://crono-proyect.shuttleapp.rs';
+//export const API_ROUTE = 'http://localhost:8000';
+export const API_ROUTE = 'https://crono-proyect.shuttleapp.rs';
 
 createApp(App)
     .component('downloadCsv', JsonCSV)
