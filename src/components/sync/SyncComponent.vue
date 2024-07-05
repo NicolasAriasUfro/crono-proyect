@@ -56,7 +56,7 @@ const uploadAllScheduleToServer = () => {
 };
 const uploadScheduleToServer = (schedule: Schedule) => {
 
-    //subir los cronogramas igualmente
+    //subir los timers igualmente
   uploadTimersOfSchedule(schedule);
 
 };
