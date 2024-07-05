@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import {useSessionStore} from "../stores/SessionStore";
 import {useAudioStore} from "../stores/AudioStore";
+import {useScheduleStore} from "../stores/SheduleStore";
 import router from "../router";
 import ThemesSelector from "../components/ThemesSelector.vue";
 
 const sessionStore = useSessionStore();
 const userName = sessionStore.userName;
 const audioStore = useAudioStore();
+const scheduleStore = useScheduleStore();
 
 const logIn = () => {
   router.push({ name: "auth" });
@@ -16,6 +18,7 @@ const logOut = async () => {
   (await audioStore.audio).pause();
   sessionStore.$reset();
   audioStore.$reset();
+  scheduleStore.$reset();
   router.push({ name: "frontpage" });
 };
 
@@ -47,7 +50,7 @@ const frontPage = () => {
       inset
       vertical
     />
-    <v-toolbar-title class="d-flex text-left align-center">
+    <v-toolbar-title v-if="useSessionStore().token != null" class="d-flex text-left align-center">
       {{ userName }}
     </v-toolbar-title>
 
