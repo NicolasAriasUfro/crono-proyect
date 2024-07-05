@@ -26,13 +26,12 @@ export const useSerialPortStore = defineStore("serialPort", {
     async connectSerialPort() {
       try {
         const port: SerialPort = await navigator.serial.requestPort();
-        console.log(port);
         // Wait for the serial port to open.
         await port.open({ baudRate: 9600 });
         this.port = port;
         console.log(this.port);
       } catch (error) {
-        console.error("Failed to connect to the serial port", error);
+        console.error("Failed to connect to the serial port: ", error);
       }
     },
     async disconnectSerialPort() {
