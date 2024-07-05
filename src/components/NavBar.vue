@@ -47,7 +47,7 @@ const frontPage = () => {
       inset
       vertical
     />
-    <v-toolbar-title class="d-flex text-left align-center">
+    <v-toolbar-title v-if="useSessionStore().token != null" class="d-flex text-left align-center">
       {{ userName }}
     </v-toolbar-title>
 

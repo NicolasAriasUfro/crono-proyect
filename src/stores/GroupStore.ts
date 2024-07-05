@@ -38,9 +38,9 @@ export const useGroupStore = defineStore("group", {
             const currentSchedule: UserGroup = useSessionStore().groups[0];
             try {
                 const dto = {
-                    timer_group_id: 50, //TODO: CHANGE THIS WHEN SCHEDULE WORKING
+                    timer_group_id: notThecurrentShedule.id, 
                     name: notThecurrentShedule.name,
-                    timers: currentSchedule.timers.map(timer => ({
+                    timers: notThecurrentShedule.timers.map(timer => ({
                         timer_id: timer.id,
                         name: timer.name,
                         seconds: timer.initialSeconds

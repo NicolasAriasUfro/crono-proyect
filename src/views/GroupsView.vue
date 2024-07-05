@@ -21,7 +21,7 @@ export default {
         }
     },
     computed: {
-        isOwner() {
+        isOwner(): boolean {
           //verificar que existe algun grupo seleccionado
           if(this.groupSelected){
             return this.groupSelected.isOwner;
@@ -106,7 +106,7 @@ export default {
     <v-dialog max-width="500">
       <template #activator="{ props: activatorProps }">
         <v-btn
-          v-if="isOwner"
+          v-if="isOwner == 1" 
           v-bind="activatorProps"
           color="error"
           variant="outlined"
