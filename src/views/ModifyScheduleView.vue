@@ -51,7 +51,6 @@ export default {
 </script>
 
 <template>
-  selectedScheduleIndex: {{ IndexSelectedSchedule }}
   <v-card>
     <v-toolbar color="primary">
       <v-tabs
