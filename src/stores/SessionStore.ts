@@ -75,7 +75,7 @@ export const useSessionStore = defineStore('session', {
         async register(registerForm: RegisterForm) {
             try {
                 const url = `${API_ROUTE}/api/user/register`;
-                const _response = await axios.post(url, registerForm, {
+                await axios.post(url, registerForm, {
                     headers: {
                         'Content-Type': 'application/json'
                     }
