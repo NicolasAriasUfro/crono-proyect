@@ -47,6 +47,9 @@ export const useScheduleStore = defineStore("schedule", {
     newScheduleId(state): number {
       state.lastScheduleId++;
       return state.lastScheduleId;
+    },
+    selectedSchedule(state): Schedule {
+      return state.schedules[state.selectedScheduleIndex];
     }
   },
   actions: {
